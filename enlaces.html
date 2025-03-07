@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abrir Enlaces</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #007BFF, #00C6FF);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            flex-direction: column;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .hora {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        button {
+            display: block;
+            width: 200px;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .holded { background-color: #d32f2f; } /* Rojo */
+        .bankinter { background-color: #ff9800; } /* Naranja */
+        .chatgpt { background-color: #212121; } /* Negro */
+        .whatsapp { background-color: #25d366; } /* Verde */
+        .calendario { background-color: #007BFF; } /* Azul */
+        .idealista { background-color: #FFD700; color: black; } /* Amarillo */
+        .meet { background-color: #9c27b0; } /* Morado */
+        .contabilidad { background-color: #4caf50; } /* Verde oscuro */
+
+        button.holded:hover { background-color: #b71c1c; }
+        button.bankinter:hover { background-color: #e68900; }
+        button.chatgpt:hover { background-color: #000000; }
+        button.whatsapp:hover { background-color: #1da851; }
+        button.calendario:hover { background-color: #005bb5; }
+        button.idealista:hover { background-color: #e6c200; }
+        button.meet:hover { background-color: #7b1fa2; }
+        button.contabilidad:hover { background-color: #388e3c; }
+    </style>
+</head>
+<body>
+    <h1 id="saludo"></h1>
+    <div class="hora" id="hora"></div>
+    
+    <div class="container">
+        <button class="holded" onclick="abrirVentana('https://app.holded.com/home')">Abrir Holded</button>
+        <button class="bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Abrir Bankinter</button>
+        <button class="chatgpt" onclick="abrirVentana('https://chatgpt.com')">Abrir ChatGPT</button>
+        <button class="whatsapp" onclick="abrirVentana('https://web.whatsapp.com/')">Abrir WhatsApp Web</button>
+        <button class="calendario" onclick="abrirVentana('https://calendar.google.com/calendar/u/0/r')">Abrir Calendario</button>
+        <button class="idealista" onclick="abrirVentana('https://www.idealista.com/')">Abrir Idealista</button>
+        <button class="meet" onclick="abrirVentana('https://meet.google.com/bff-vjii-hme?pli=1')">Abrir Google Meet</button>
+        <button class="contabilidad" onclick="abrirVentana('https://www.cef.es/es/videos-de-contabilidad.html')">Curso Contabilidad</button>
+    </div>
+
+    <script>
+        function actualizarHora() {
+            let ahora = new Date();
+            let horas = ahora.getHours();
+            let minutos = ahora.getMinutes();
+            let segundos = ahora.getSeconds();
+            let saludo = horas < 12 ? "Buenos días" : "Buenas tardes";
+
+            document.getElementById("saludo").innerText = saludo;
+            document.getElementById("hora").innerText = `Hora local: ${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+        }
+
+        function abrirVentana(url) {
+            window.open(url, "_blank", "toolbar=no,location=no,status=no");
+        }
+
+        actualizarHora();
+        setInterval(actualizarHora, 1000);
+    </script>
+</body>
+</html>
