@@ -34,7 +34,7 @@
             font-size: 14px;
             border: 2px solid #ccc;
             border-radius: 5px;
-            width: 180px;
+            width: 240px;
             transition: border-color 0.3s;
         }
         .search-container input:focus {
@@ -68,6 +68,24 @@
             max-width: 400px;
             margin: 10px auto;
         }
+        .toggle-container {
+            margin-bottom: 10px;
+        }
+        .toggle-button {
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .toggle-button.off {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
@@ -92,23 +110,40 @@
         button:hover {
             transform: scale(1.05);
         }
-        .holded { background-color: #d32f2f; }
-        .bankinter { background-color: #ff9800; }
-        .chatgpt { background-color: #212121; }
-        .whatsapp { background-color: #25d366; }
-        .calendario { background-color: #007BFF; }
-        .idealista { background-color: #FFD700; color: black; }
-        .meet { background-color: #9c27b0; }
-        .contabilidad { background-color: #4caf50; }
-        
-        .holded:hover { background-color: #b71c1c; }
-        .bankinter:hover { background-color: #e68900; }
-        .chatgpt:hover { background-color: #000000; }
-        .whatsapp:hover { background-color: #1da851; }
-        .calendario:hover { background-color: #005bb5; }
-        .idealista:hover { background-color: #e6c200; }
-        .meet:hover { background-color: #7b1fa2; }
-        .contabilidad:hover { background-color: #388e3c; }
+        /* Colores personalizados para los botones */
+        .btn-holded {
+            background-color: #FF4C4C; /* Rojo */
+            border-color: #FF4C4C;
+        }
+        .btn-whatsapp {
+            background-color: #25D366; /* Verde WhatsApp */
+            border-color: #25D366;
+        }
+        .btn-bankinter {
+            background-color: #FF7F00; /* Naranja Bankinter */
+            border-color: #FF7F00;
+        }
+        .btn-chatgpt {
+            background-color: #333333; /* Negro ChatGPT */
+            border-color: #333333;
+        }
+        /* Botones con colores específicos */
+        .btn-calendario {
+            background-color: #007BFF; /* Azul Calendario */
+            border-color: #007BFF;
+        }
+        .btn-idealista {
+            background-color: #FFD700; /* Amarillo Idealista */
+            border-color: #FFD700;
+        }
+        .btn-meet {
+            background-color: #800080; /* Morado Google Meet */
+            border-color: #800080;
+        }
+        .btn-contabilidad {
+            background-color: #6F4F28; /* Marrón Curso Contabilidad */
+            border-color: #6F4F28;
+        }
     </style>
 </head>
 <body>
@@ -116,37 +151,46 @@
     <div class="hora" id="hora"></div>
     
     <div class="search-container">
-        <input type="text" id="search" placeholder="Buscar en Google...">
-        <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar en Google</button>
+        <input type="text" id="search" placeholder="Buscar..." oninput="habilitarBotonBuscar()">
+        <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar</button>
+    </div>
+    
+    <div class="toggle-container">
+        <button id="toggle-emergente" class="toggle-button" onclick="toggleEmergente()">Emergente: Activado</button>
     </div>
     
     <div class="container grid-container">
-        <button class="holded" onclick="abrirVentana('https://app.holded.com/home')">Abrir Holded</button>
-        <button class="bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Abrir Bankinter</button>
-        <button class="chatgpt" onclick="abrirVentana('https://chatgpt.com')">Abrir ChatGPT</button>
-        <button class="whatsapp" onclick="abrirVentana('https://web.whatsapp.com/')">Abrir WhatsApp Web</button>
-        <button class="calendario" onclick="abrirVentana('https://calendar.google.com/calendar/u/0/r')">Abrir Calendario</button>
-        <button class="idealista" onclick="abrirVentana('https://www.idealista.com/')">Abrir Idealista</button>
-        <button class="meet" onclick="abrirVentana('https://meet.google.com/bff-vjii-hme?pli=1')">Abrir Google Meet</button>
-        <button class="contabilidad" onclick="abrirVentana('https://www.cef.es/es/videos-de-contabilidad.html')">Curso Contabilidad</button>
+        <button class="btn-holded" onclick="abrirVentana('https://app.holded.com/home')">Abrir Holded</button>
+        <button class="btn-bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Abrir Bankinter</button>
+        <button class="btn-chatgpt" onclick="abrirVentana('https://chatgpt.com')">Abrir ChatGPT</button>
+        <button class="btn-whatsapp" onclick="abrirVentana('https://web.whatsapp.com/')">Abrir WhatsApp Web</button>
+        <button class="btn-calendario" onclick="abrirVentana('https://calendar.google.com/calendar/u/0/r')">Abrir Calendario</button>
+        <button class="btn-idealista" onclick="abrirVentana('https://www.idealista.com/')">Abrir Idealista</button>
+        <button class="btn-meet" onclick="abrirVentana('https://meet.google.com/bff-vjii-hme?pli=1')">Abrir Google Meet</button>
+        <button class="btn-contabilidad" onclick="abrirVentana('https://www.cef.es/es/videos-de-contabilidad.html')">Curso Contabilidad</button>
     </div>
 
     <script>
+        let emergente = true;
+
         function actualizarHora() {
             let ahora = new Date();
             let horas = ahora.getHours();
             let minutos = ahora.getMinutes();
             let segundos = ahora.getSeconds();
             let saludo = horas < 12 ? "Buenos días" : "Buenas tardes";
-
             document.getElementById("saludo").innerText = saludo;
             document.getElementById("hora").innerText = `Hora local: ${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
         }
 
         function abrirVentana(url) {
-            window.open(url, "_blank", "toolbar=no,location=no,status=no");
+            if (emergente) {
+                window.open(url, "_blank", "toolbar=no,location=no,status=no");
+            } else {
+                window.open(url, "_blank");
+            }
         }
-        
+
         function buscarEnGoogle() {
             let query = document.getElementById('search').value;
             if (query) {
@@ -154,10 +198,27 @@
             }
         }
 
-        document.getElementById('search').addEventListener('input', function() {
-            let searchBtn = document.getElementById('search-btn');
-            searchBtn.disabled = this.value.trim() === "";
-        });
+        function habilitarBotonBuscar() {
+            let input = document.getElementById('search');
+            let boton = document.getElementById('search-btn');
+            if (input.value.trim() !== "") {
+                boton.disabled = false;
+            } else {
+                boton.disabled = true;
+            }
+        }
+
+        function toggleEmergente() {
+            emergente = !emergente;
+            let button = document.getElementById('toggle-emergente');
+            if (emergente) {
+                button.textContent = "Emergente: Activado";
+                button.classList.remove("off");
+            } else {
+                button.textContent = "Emergente: Desactivado";
+                button.classList.add("off");
+            }
+        }
 
         actualizarHora();
         setInterval(actualizarHora, 1000);
