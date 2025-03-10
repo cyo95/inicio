@@ -23,18 +23,63 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
         }
+        .search-container {
+            margin: 10px 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .search-container input {
+            padding: 6px;
+            font-size: 14px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 180px;
+            transition: border-color 0.3s;
+        }
+        .search-container input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        .search-container button {
+            padding: 6px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid #007BFF;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .search-container button:disabled {
+            background-color: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+        }
+        .search-container input:not(:placeholder-shown) + button {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            max-width: 400px;
+            margin: 10px auto;
+        }
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
         }
         .hora {
             font-size: 18px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         button {
             display: block;
             width: 200px;
-            margin: 10px auto;
+            margin: 5px auto;
             padding: 10px;
             font-size: 16px;
             font-weight: bold;
@@ -47,30 +92,35 @@
         button:hover {
             transform: scale(1.05);
         }
-        .holded { background-color: #d32f2f; } /* Rojo */
-        .bankinter { background-color: #ff9800; } /* Naranja */
-        .chatgpt { background-color: #212121; } /* Negro */
-        .whatsapp { background-color: #25d366; } /* Verde */
-        .calendario { background-color: #007BFF; } /* Azul */
-        .idealista { background-color: #FFD700; color: black; } /* Amarillo */
-        .meet { background-color: #9c27b0; } /* Morado */
-        .contabilidad { background-color: #4caf50; } /* Verde oscuro */
-
-        button.holded:hover { background-color: #b71c1c; }
-        button.bankinter:hover { background-color: #e68900; }
-        button.chatgpt:hover { background-color: #000000; }
-        button.whatsapp:hover { background-color: #1da851; }
-        button.calendario:hover { background-color: #005bb5; }
-        button.idealista:hover { background-color: #e6c200; }
-        button.meet:hover { background-color: #7b1fa2; }
-        button.contabilidad:hover { background-color: #388e3c; }
+        .holded { background-color: #d32f2f; }
+        .bankinter { background-color: #ff9800; }
+        .chatgpt { background-color: #212121; }
+        .whatsapp { background-color: #25d366; }
+        .calendario { background-color: #007BFF; }
+        .idealista { background-color: #FFD700; color: black; }
+        .meet { background-color: #9c27b0; }
+        .contabilidad { background-color: #4caf50; }
+        
+        .holded:hover { background-color: #b71c1c; }
+        .bankinter:hover { background-color: #e68900; }
+        .chatgpt:hover { background-color: #000000; }
+        .whatsapp:hover { background-color: #1da851; }
+        .calendario:hover { background-color: #005bb5; }
+        .idealista:hover { background-color: #e6c200; }
+        .meet:hover { background-color: #7b1fa2; }
+        .contabilidad:hover { background-color: #388e3c; }
     </style>
 </head>
 <body>
     <h1 id="saludo"></h1>
     <div class="hora" id="hora"></div>
     
-    <div class="container">
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Buscar en Google...">
+        <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar en Google</button>
+    </div>
+    
+    <div class="container grid-container">
         <button class="holded" onclick="abrirVentana('https://app.holded.com/home')">Abrir Holded</button>
         <button class="bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Abrir Bankinter</button>
         <button class="chatgpt" onclick="abrirVentana('https://chatgpt.com')">Abrir ChatGPT</button>
@@ -96,6 +146,18 @@
         function abrirVentana(url) {
             window.open(url, "_blank", "toolbar=no,location=no,status=no");
         }
+        
+        function buscarEnGoogle() {
+            let query = document.getElementById('search').value;
+            if (query) {
+                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+            }
+        }
+
+        document.getElementById('search').addEventListener('input', function() {
+            let searchBtn = document.getElementById('search-btn');
+            searchBtn.disabled = this.value.trim() === "";
+        });
 
         actualizarHora();
         setInterval(actualizarHora, 1000);
