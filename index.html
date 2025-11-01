@@ -1,227 +1,317 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abrir Enlaces</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #007BFF, #00C6FF);
-            font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
-            flex-direction: column;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-        }
-        .search-container {
-            margin: 10px 0;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-        .search-container input {
-            padding: 6px;
-            font-size: 14px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            width: 240px;
-            transition: border-color 0.3s;
-        }
-        .search-container input:focus {
-            border-color: #007BFF;
-            outline: none;
-        }
-        .search-container button {
-            padding: 6px 10px;
-            font-size: 14px;
-            font-weight: bold;
-            border: 2px solid #007BFF;
-            border-radius: 5px;
-            background-color: #007BFF;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .search-container button:disabled {
-            background-color: #ccc;
-            border-color: #ccc;
-            cursor: not-allowed;
-        }
-        .search-container input:not(:placeholder-shown) + button {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            max-width: 400px;
-            margin: 10px auto;
-        }
-        .toggle-container {
-            margin-bottom: 10px;
-        }
-        .toggle-button {
-            padding: 8px 12px;
-            font-size: 14px;
-            font-weight: bold;
-            border: 2px solid #28a745;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .toggle-button.off {
-            background-color: #dc3545;
-            border-color: #dc3545;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .hora {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        button {
-            display: block;
-            width: 200px;
-            margin: 5px auto;
-            padding: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
-        }
-        button:hover {
-            transform: scale(1.05);
-        }
-        /* Colores personalizados para los botones */
-        .btn-holded {
-            background-color: #FF4C4C; /* Rojo */
-            border-color: #FF4C4C;
-        }
-        .btn-whatsapp {
-            background-color: #25D366; /* Verde WhatsApp */
-            border-color: #25D366;
-        }
-        .btn-bankinter {
-            background-color: #FF7F00; /* Naranja Bankinter */
-            border-color: #FF7F00;
-        }
-        .btn-chatgpt {
-            background-color: #333333; /* Negro ChatGPT */
-            border-color: #333333;
-        }
-        /* Botones con colores específicos */
-        .btn-calendario {
-            background-color: #007BFF; /* Azul Calendario */
-            border-color: #007BFF;
-        }
-        .btn-idealista {
-            background-color: #FFD700; /* Amarillo Idealista */
-            border-color: #FFD700;
-        }
-        .btn-meet {
-            background-color: #800080; /* Morado Google Meet */
-            border-color: #800080;
-        }
-        .btn-contabilidad {
-            background-color: #6F4F28; /* Marrón Curso Contabilidad */
-            border-color: #6F4F28;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centro de Enlaces</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    body {
+        margin: 0;
+        height: 100vh;
+        font-family: 'Poppins', sans-serif;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background: linear-gradient(270deg, #6a11cb, #2575fc, #00c6ff, #ff6ec4);
+        background-size: 800% 800%;
+        animation: gradientMove 15s ease infinite;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Contenedor principal centrado verticalmente */
+    .main-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+        width: 100%;
+        max-width: 600px;
+        height: 90vh;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        font-size: 2.8rem;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        margin: 0;
+        letter-spacing: 1px;
+    }
+
+    .hora {
+        font-size: 2rem;
+        font-weight: 600;
+        text-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        margin: 10px 0 25px 0;
+    }
+
+    /* Barra de navegación */
+    .nav-tabs {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 10px;
+    }
+
+    .nav-button {
+        background: rgba(255,255,255,0.25);
+        backdrop-filter: blur(5px);
+        border: none;
+        border-radius: 15px;
+        padding: 10px 20px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .nav-button:hover {
+        background: rgba(255,255,255,0.5);
+        color: #000;
+        transform: scale(1.05);
+    }
+
+    .nav-button.active {
+        background: rgba(255,255,255,0.8);
+        color: #000;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .search-container input {
+        padding: 10px;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        width: 250px;
+        font-size: 14px;
+        transition: all 0.3s;
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+    }
+
+    .search-container input:focus {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(255,255,255,0.6);
+    }
+
+    .search-container button {
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.25);
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        backdrop-filter: blur(5px);
+    }
+
+    .search-container button:hover:not(:disabled) {
+        background: rgba(255,255,255,0.5);
+        color: #000;
+        transform: scale(1.08);
+    }
+
+    .toggle-container {
+        margin-bottom: 10px;
+    }
+
+    .toggle-button {
+        padding: 8px 15px;
+        border-radius: 20px;
+        border: none;
+        background: linear-gradient(90deg, #28a745, #00d27f);
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .toggle-button.off {
+        background: linear-gradient(90deg, #dc3545, #ff5a5f);
+    }
+
+    .container {
+        background: rgba(255,255,255,0.15);
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        backdrop-filter: blur(12px);
+        display: none;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .container.active {
+        display: block;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 10px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        backdrop-filter: blur(10px);
+    }
+
+    button:hover {
+        transform: scale(1.07);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
+
+    /* Botones sección Trabajar */
+    .btn-holded { background: linear-gradient(135deg, #ff4c4c, #ff7878); }
+    .btn-bankinter { background: linear-gradient(135deg, #ff7f00, #ff9c33); }
+    .btn-chatgpt { background: linear-gradient(135deg, #333, #666); }
+    .btn-whatsapp { background: linear-gradient(135deg, #25D366, #1DA955); }
+    .btn-idealista { background: linear-gradient(135deg, #FFD700, #ffed4a); color: #333; }
+    .btn-meet { background: linear-gradient(135deg, #800080, #b266ff); }
+
+    /* Botones sección Ocio */
+    .btn-netflix { background: linear-gradient(135deg, #E50914, #B81D24); }
+    .btn-movistar { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+    .btn-youtube { background: linear-gradient(135deg, #FF0000, #CC0000); }
+    .btn-hbo { background: linear-gradient(135deg, #6a11cb, #2575fc); }
+    .btn-prime { background: linear-gradient(135deg, #00A8E1, #007BFF); }
+    .btn-twitch { background: linear-gradient(135deg, #6441A5, #9146FF); }
+
+</style>
 </head>
 <body>
-    <h1 id="saludo"></h1>
-    <div class="hora" id="hora"></div>
-    
+<div class="main-content">
+    <div>
+        <h1 id="saludo"></h1>
+        <div class="hora" id="hora"></div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="nav-button active" onclick="mostrarSeccion('trabajo', this)">💼 Trabajar</button>
+        <button class="nav-button" onclick="mostrarSeccion('ocio', this)">🎬 Ocio</button>
+    </div>
+
     <div class="search-container">
         <input type="text" id="search" placeholder="Buscar..." oninput="habilitarBotonBuscar()">
         <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar</button>
     </div>
-    
+
     <div class="toggle-container">
         <button id="toggle-emergente" class="toggle-button" onclick="toggleEmergente()">Emergente: Activado</button>
     </div>
-    
-    <div class="container grid-container">
-        <button class="btn-holded" onclick="abrirVentana('https://app.holded.com/home')">Abrir Holded</button>
-        <button class="btn-bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Abrir Bankinter</button>
-        <button class="btn-chatgpt" onclick="abrirVentana('https://chatgpt.com')">Abrir ChatGPT</button>
-        <button class="btn-whatsapp" onclick="abrirVentana('https://web.whatsapp.com/')">Abrir WhatsApp Web</button>
-        <button class="btn-calendario" onclick="abrirVentana('https://calendar.google.com/calendar/u/0/r')">Abrir Calendario</button>
-        <button class="btn-idealista" onclick="abrirVentana('https://www.idealista.com/')">Abrir Idealista</button>
-        <button class="btn-meet" onclick="abrirVentana('https://meet.google.com/bff-vjii-hme?pli=1')">Abrir Google Meet</button>
-        <button class="btn-contabilidad" onclick="abrirVentana('https://www.cef.es/es/videos-de-contabilidad.html')">Curso Contabilidad</button>
+
+    <!-- SECCIÓN TRABAJAR -->
+    <div id="trabajo" class="container active">
+        <div class="grid-container">
+            <button class="btn-holded" onclick="abrirVentana('https://app.holded.com/home')">Holded</button>
+            <button class="btn-bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Bankinter</button>
+            <button class="btn-chatgpt" onclick="abrirVentana('https://chatgpt.com')">ChatGPT</button>
+            <button class="btn-whatsapp" onclick="abrirVentana('https://web.whatsapp.com/')">WhatsApp</button>
+            <button class="btn-idealista" onclick="abrirVentana('https://www.idealista.com/')">Idealista</button>
+            <button class="btn-meet" onclick="abrirVentana('https://meet.google.com/')">Google Meet</button>
+        </div>
     </div>
 
-    <script>
-        let emergente = true;
+    <!-- SECCIÓN OCIO -->
+    <div id="ocio" class="container">
+        <div class="grid-container">
+            <button class="btn-netflix" onclick="abrirVentana('https://www.netflix.com/')">Netflix</button>
+            <button class="btn-movistar" onclick="abrirVentana('https://ver.movistarplus.es/canales')">Movistar Plus</button>
+            <button class="btn-youtube" onclick="abrirVentana('https://www.youtube.com/')">YouTube</button>
+            <button class="btn-hbo" onclick="abrirVentana('https://www.hbomax.com/')">HBO Max</button>
+            <button class="btn-prime" onclick="abrirVentana('https://www.primevideo.com/')">Prime Video</button>
+            <button class="btn-twitch" onclick="abrirVentana('https://www.twitch.tv/')">Twitch</button>
+        </div>
+    </div>
+</div>
 
-        function actualizarHora() {
-            let ahora = new Date();
-            let horas = ahora.getHours();
-            let minutos = ahora.getMinutes();
-            let segundos = ahora.getSeconds();
-            let saludo = horas < 12 ? "Buenos días" : "Buenas tardes";
-            document.getElementById("saludo").innerText = saludo;
-            document.getElementById("hora").innerText = `Hora local: ${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}:${segundos.toString().padStart(2, '0')}`;
+<script>
+    let emergente = true;
+
+    function actualizarHora() {
+        const ahora = new Date();
+        const horas = ahora.getHours();
+        const minutos = ahora.getMinutes();
+        const segundos = ahora.getSeconds();
+        let saludo = "";
+
+        if (horas < 12) saludo = "🌞 Buenos días";
+        else if (horas < 20) saludo = "🌤️ Buenas tardes";
+        else saludo = "🌙 Buenas noches";
+
+        document.getElementById("saludo").innerText = saludo;
+        document.getElementById("hora").innerText =
+            `Hora local: ${horas.toString().padStart(2,'0')}:${minutos.toString().padStart(2,'0')}:${segundos.toString().padStart(2,'0')}`;
+    }
+
+    function abrirVentana(url) {
+        if (emergente) {
+            window.open(url, "_blank", "toolbar=no,location=no,status=no");
+        } else {
+            window.open(url, "_blank");
         }
+    }
 
-        function abrirVentana(url) {
-            if (emergente) {
-                window.open(url, "_blank", "toolbar=no,location=no,status=no");
-            } else {
-                window.open(url, "_blank");
-            }
+    function buscarEnGoogle() {
+        const query = document.getElementById('search').value.trim();
+        if (query) {
+            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
         }
+    }
 
-        function buscarEnGoogle() {
-            let query = document.getElementById('search').value;
-            if (query) {
-                window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-            }
+    function habilitarBotonBuscar() {
+        const input = document.getElementById('search');
+        const boton = document.getElementById('search-btn');
+        boton.disabled = input.value.trim() === "";
+    }
+
+    function toggleEmergente() {
+        emergente = !emergente;
+        const button = document.getElementById('toggle-emergente');
+        if (emergente) {
+            button.textContent = "Emergente: Activado";
+            button.classList.remove("off");
+        } else {
+            button.textContent = "Emergente: Desactivado";
+            button.classList.add("off");
         }
+    }
 
-        function habilitarBotonBuscar() {
-            let input = document.getElementById('search');
-            let boton = document.getElementById('search-btn');
-            if (input.value.trim() !== "") {
-                boton.disabled = false;
-            } else {
-                boton.disabled = true;
-            }
-        }
+    function mostrarSeccion(id, boton) {
+        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
 
-        function toggleEmergente() {
-            emergente = !emergente;
-            let button = document.getElementById('toggle-emergente');
-            if (emergente) {
-                button.textContent = "Emergente: Activado";
-                button.classList.remove("off");
-            } else {
-                button.textContent = "Emergente: Desactivado";
-                button.classList.add("off");
-            }
-        }
+        document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
+        boton.classList.add('active');
+    }
 
-        actualizarHora();
-        setInterval(actualizarHora, 1000);
-    </script>
+    actualizarHora();
+    setInterval(actualizarHora, 1000);
+</script>
 </body>
 </html>
