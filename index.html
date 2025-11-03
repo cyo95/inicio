@@ -202,6 +202,189 @@
     .btn-prime { background: linear-gradient(135deg, #00A8E1, #007BFF); }
     .btn-twitch { background: linear-gradient(135deg, #6441A5, #9146FF); }
 
+    /* Panel flotante de jornada laboral */
+    .work-panel {
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        width: 320px;
+        padding: 20px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        color: #0f172a;
+        z-index: 10;
+    }
+
+    .work-panel h2 {
+        margin: 0 0 10px;
+        font-size: 1.4rem;
+        color: #0f172a;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .work-panel p {
+        margin: 8px 0;
+        font-size: 0.95rem;
+        color: rgba(15, 23, 42, 0.85);
+    }
+
+    .countdown {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin: 12px 0 18px;
+        padding: 12px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.35);
+        color: #0f172a;
+        box-shadow: inset 0 0 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .countdown span.label {
+        font-size: 0.8rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    .countdown span.time {
+        font-size: 1.6rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+
+    .timeline {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .timeline-track {
+        position: relative;
+        height: 14px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.15);
+        overflow: hidden;
+    }
+
+    .timeline-segment {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(42, 252, 152, 0.9), rgba(33, 211, 255, 0.9));
+        box-shadow: 0 0 10px rgba(33, 211, 255, 0.6);
+    }
+
+    .timeline-marker {
+        position: absolute;
+        top: -4px;
+        width: 2px;
+        height: 22px;
+        background: #0f172a;
+        border-radius: 999px;
+        box-shadow: 0 0 6px rgba(15, 23, 42, 0.4);
+        transform: translateX(-50%);
+    }
+
+    .timeline-legend {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.75rem;
+        color: rgba(15, 23, 42, 0.7);
+    }
+
+    .next-shift {
+        font-size: 0.8rem;
+        color: rgba(15, 23, 42, 0.75);
+    }
+
+    .progress-block {
+        margin-top: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .progress-label {
+        font-size: 0.78rem;
+        letter-spacing: 0.3px;
+        color: rgba(15, 23, 42, 0.75);
+    }
+
+    .progress-track {
+        position: relative;
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.15);
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(255, 200, 87, 0.9), rgba(255, 128, 171, 0.9));
+        box-shadow: 0 0 12px rgba(255, 200, 87, 0.4);
+        transition: width 0.4s ease;
+    }
+
+    .summary-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .schedule-summary {
+        flex: 1;
+        margin: 0;
+        font-size: 0.82rem;
+        color: rgba(15, 23, 42, 0.75);
+        line-height: 1.4;
+    }
+
+    .weekly-percentage {
+        font-size: 0.72rem;
+        font-weight: 600;
+        color: rgba(15, 23, 42, 0.85);
+        background: rgba(255, 255, 255, 0.4);
+        padding: 4px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 900px) {
+        body {
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 40px;
+            height: auto;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            width: calc(100% - 60px);
+            max-width: 600px;
+            height: auto;
+            margin-top: 0;
+        }
+
+        .work-panel {
+            position: static;
+            width: calc(100% - 60px);
+            margin: 25px auto 40px;
+        }
+    }
+
 </style>
 </head>
 <body>
@@ -212,13 +395,13 @@
     </div>
 
     <div class="nav-tabs">
-        <button class="nav-button active" onclick="mostrarSeccion('trabajo', this)">💼 Trabajar</button>
-        <button class="nav-button" onclick="mostrarSeccion('ocio', this)">🎬 Ocio</button>
+        <button class="nav-button" data-target="trabajo" onclick="mostrarSeccion('trabajo', this, false)">💼 Trabajar</button>
+        <button class="nav-button" data-target="ocio" onclick="mostrarSeccion('ocio', this, false)">🎬 Ocio</button>
     </div>
 
     <div class="search-container">
-        <input type="text" id="search" placeholder="Buscar..." oninput="habilitarBotonBuscar()">
-        <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar</button>
+        <input type="text" id="search" placeholder="Buscar en Google..." oninput="habilitarBotonBuscar()">
+        <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar en Google</button>
     </div>
 
     <div class="toggle-container">
@@ -226,7 +409,7 @@
     </div>
 
     <!-- SECCIÓN TRABAJAR -->
-    <div id="trabajo" class="container active">
+    <div id="trabajo" class="container">
         <div class="grid-container">
             <button class="btn-holded" onclick="abrirVentana('https://app.holded.com/home')">Holded</button>
             <button class="btn-bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Bankinter</button>
@@ -250,8 +433,69 @@
     </div>
 </div>
 
+<div class="work-panel" id="work-panel">
+    <h2>🗓️ Jornada laboral</h2>
+    <p id="work-status">Cargando...</p>
+    <div class="countdown">
+        <span class="label" id="countdown-label">Próximo evento</span>
+        <span class="time" id="countdown-timer">--:--:--</span>
+    </div>
+    <div class="timeline">
+        <div class="timeline-track" id="timeline-track">
+            <div class="timeline-marker" id="timeline-marker"></div>
+        </div>
+        <div class="timeline-legend">
+            <span>00:00</span>
+            <span>12:00</span>
+            <span>24:00</span>
+        </div>
+    </div>
+    <div class="progress-block">
+        <span class="progress-label">Progreso de la jornada</span>
+        <div class="progress-track">
+            <div class="progress-fill" id="day-progress-fill"></div>
+        </div>
+    </div>
+    <div class="summary-row">
+        <p class="schedule-summary" id="schedule-summary-text"></p>
+        <span class="weekly-percentage" id="weekly-percentage"></span>
+    </div>
+    <p class="next-shift" id="next-shift"></p>
+</div>
+
 <script>
     let emergente = true;
+    let usuarioSeleccionoManual = false;
+    let ultimaPestanaAutomatica = null;
+
+    const schedule = {
+        1: [
+            { start: "09:00", end: "14:00" },
+            { start: "16:00", end: "19:30" }
+        ],
+        2: [
+            { start: "09:00", end: "14:00" },
+            { start: "16:00", end: "19:30" }
+        ],
+        3: [
+            { start: "09:00", end: "14:00" },
+            { start: "16:00", end: "19:30" }
+        ],
+        4: [
+            { start: "09:00", end: "14:00" },
+            { start: "16:00", end: "19:30" }
+        ],
+        5: [
+            { start: "08:30", end: "14:00" }
+        ],
+        6: [],
+        0: []
+    };
+
+    const scheduleSummary = "Resumen: L-J 09:00-14:00 / 16:00-19:30 · V 08:30-14:00";
+    const totalWeeklyMinutes = calcularTotalSemanal();
+
+    const dayNames = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
 
     function actualizarHora() {
         const ahora = new Date();
@@ -266,7 +510,7 @@
 
         document.getElementById("saludo").innerText = saludo;
         document.getElementById("hora").innerText =
-            `Hora local: ${horas.toString().padStart(2,'0')}:${minutos.toString().padStart(2,'0')}:${segundos.toString().padStart(2,'0')}`;
+            `${horas.toString().padStart(2,'0')}:${minutos.toString().padStart(2,'0')}:${segundos.toString().padStart(2,'0')}`;
     }
 
     function abrirVentana(url) {
@@ -302,16 +546,264 @@
         }
     }
 
-    function mostrarSeccion(id, boton) {
+    function mostrarSeccion(id, boton = null, automatico = false) {
         document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+        const objetivo = document.getElementById(id);
+        if (objetivo) {
+            objetivo.classList.add('active');
+        }
 
-        document.querySelectorAll('.nav-button').forEach(b => b.classList.remove('active'));
-        boton.classList.add('active');
+        const botones = document.querySelectorAll('.nav-button');
+        botones.forEach(b => b.classList.remove('active'));
+
+        if (boton) {
+            boton.classList.add('active');
+        } else {
+            const botonAutomatico = document.querySelector(`.nav-button[data-target="${id}"]`);
+            if (botonAutomatico) {
+                botonAutomatico.classList.add('active');
+            }
+        }
+
+        if (!automatico) {
+            usuarioSeleccionoManual = true;
+        }
     }
 
-    actualizarHora();
-    setInterval(actualizarHora, 1000);
+    function toMinutes(timeStr) {
+        const [hours, minutes] = timeStr.split(":").map(Number);
+        return hours * 60 + minutes;
+    }
+
+    function createDateWithTime(baseDate, timeStr) {
+        const [hours, minutes] = timeStr.split(":").map(Number);
+        const result = new Date(baseDate);
+        result.setHours(hours, minutes, 0, 0);
+        return result;
+    }
+
+    function formatDuration(ms) {
+        if (ms <= 0) return "00:00:00";
+        const totalSeconds = Math.floor(ms / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function formatRelativeDay(base, target) {
+        const baseCopy = new Date(base);
+        const targetCopy = new Date(target);
+        baseCopy.setHours(0, 0, 0, 0);
+        targetCopy.setHours(0, 0, 0, 0);
+        const diffDays = Math.round((targetCopy - baseCopy) / (1000 * 60 * 60 * 24));
+        if (diffDays === 0) return "hoy";
+        if (diffDays === 1) return "mañana";
+        return `el ${dayNames[targetCopy.getDay()]}`;
+    }
+
+    function findNextWorkStart(now) {
+        for (let i = 0; i < 7; i++) {
+            const candidate = new Date(now);
+            candidate.setHours(0, 0, 0, 0);
+            candidate.setDate(candidate.getDate() + i);
+            const day = candidate.getDay();
+            const segments = schedule[day] || [];
+            if (segments.length === 0) continue;
+
+            if (i === 0) {
+                const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                const upcomingToday = segments.find(segment => currentMinutes < toMinutes(segment.start));
+                if (upcomingToday) {
+                    return {
+                        date: new Date(candidate),
+                        segment: upcomingToday,
+                        label: "hoy",
+                        segments
+                    };
+                }
+            } else {
+                return {
+                    date: new Date(candidate),
+                    segment: segments[0],
+                    label: formatRelativeDay(new Date(now), new Date(candidate)),
+                    segments
+                };
+            }
+        }
+        return null;
+    }
+
+    function actualizarPanelLaboral() {
+        const ahora = new Date();
+        const diaSemana = ahora.getDay();
+        const segmentosHoy = schedule[diaSemana] || [];
+        const minutosActuales = ahora.getHours() * 60 + ahora.getMinutes();
+
+        const statusElement = document.getElementById('work-status');
+        const countdownLabel = document.getElementById('countdown-label');
+        const countdownTimer = document.getElementById('countdown-timer');
+        const nextShiftInfo = document.getElementById('next-shift');
+        const timelineTrack = document.getElementById('timeline-track');
+        const timelineMarker = document.getElementById('timeline-marker');
+        const dayProgressFill = document.getElementById('day-progress-fill');
+        const weeklyPercentageElement = document.getElementById('weekly-percentage');
+        const scheduleSummaryElement = document.getElementById('schedule-summary-text');
+
+        timelineTrack.querySelectorAll('.timeline-segment').forEach(seg => seg.remove());
+
+        segmentosHoy.forEach(segmento => {
+            const seg = document.createElement('div');
+            seg.className = 'timeline-segment';
+            const inicio = toMinutes(segmento.start);
+            const fin = toMinutes(segmento.end);
+            const left = (inicio / 1440) * 100;
+            const width = ((fin - inicio) / 1440) * 100;
+            seg.style.left = `${left}%`;
+            seg.style.width = `${width}%`;
+            timelineTrack.appendChild(seg);
+        });
+
+        const posicionActual = (minutosActuales / 1440) * 100;
+        timelineMarker.style.left = `${Math.min(Math.max(posicionActual, 0), 100)}%`;
+
+        const totalMinutesToday = segmentosHoy.reduce((total, segmento) => total + (toMinutes(segmento.end) - toMinutes(segmento.start)), 0);
+        let completedMinutesToday = 0;
+        segmentosHoy.forEach(segmento => {
+            const inicio = toMinutes(segmento.start);
+            const fin = toMinutes(segmento.end);
+            const limite = Math.min(minutosActuales, fin);
+            if (limite > inicio) {
+                completedMinutesToday += Math.min(limite - inicio, fin - inicio);
+            }
+        });
+        const progresoJornada = totalMinutesToday > 0 ? Math.min((completedMinutesToday / totalMinutesToday) * 100, 100) : 0;
+        if (dayProgressFill) {
+            dayProgressFill.style.width = `${progresoJornada}%`;
+        }
+
+        if (scheduleSummaryElement && !scheduleSummaryElement.textContent) {
+            scheduleSummaryElement.textContent = scheduleSummary;
+        }
+
+        if (weeklyPercentageElement) {
+            const minutosTrabajadosSemana = calcularMinutosTrabajadosSemana(ahora);
+            const porcentajeSemanal = totalWeeklyMinutes > 0 ? Math.min((minutosTrabajadosSemana / totalWeeklyMinutes) * 100, 100) : 0;
+            weeklyPercentageElement.textContent = `${Math.round(porcentajeSemanal)}% semana`;
+        }
+
+        let mensajeEstado = '';
+        let etiquetaCuentaAtras = '';
+        let objetivo = null;
+        let infoProximo = '';
+
+        const segmentoActual = segmentosHoy.find(segmento => minutosActuales >= toMinutes(segmento.start) && minutosActuales < toMinutes(segmento.end));
+
+        if (segmentoActual) {
+            mensajeEstado = `En jornada laboral (${segmentoActual.start} - ${segmentoActual.end}).`;
+            etiquetaCuentaAtras = 'Tiempo restante para la siguiente pausa';
+            objetivo = createDateWithTime(ahora, segmentoActual.end);
+            const indiceSegmento = segmentosHoy.indexOf(segmentoActual);
+            if (indiceSegmento < segmentosHoy.length - 1) {
+                const siguiente = segmentosHoy[indiceSegmento + 1];
+                infoProximo = `Después descanso hasta las ${siguiente.start}.`;
+            } else {
+                infoProximo = 'Después: fin de la jornada.';
+            }
+        } else {
+            const siguienteHoy = segmentosHoy.find(segmento => minutosActuales < toMinutes(segmento.start));
+            if (segmentosHoy.length === 0) {
+                mensajeEstado = `Hoy (${dayNames[diaSemana]}) es día libre.`;
+            } else if (siguienteHoy) {
+                mensajeEstado = 'En pausa dentro de la jornada.';
+                infoProximo = `Próximo bloque: ${siguienteHoy.start} - ${siguienteHoy.end}.`;
+            } else {
+                mensajeEstado = 'Jornada finalizada por hoy.';
+            }
+
+            if (siguienteHoy) {
+                etiquetaCuentaAtras = 'Tiempo restante para volver al trabajo';
+                objetivo = createDateWithTime(ahora, siguienteHoy.start);
+            } else {
+                const proximo = findNextWorkStart(ahora);
+                if (proximo) {
+                    const proximaFecha = new Date(proximo.date);
+                    objetivo = createDateWithTime(proximaFecha, proximo.segment.start);
+                    etiquetaCuentaAtras = 'Tiempo restante para comenzar la jornada';
+                    const labelDia = proximo.label;
+                    mensajeEstado += ` Próxima jornada ${labelDia} a las ${proximo.segment.start}.`;
+                    infoProximo = `Horario completo: ${proximo.segments.map(seg => `${seg.start}-${seg.end}`).join(' / ')}.`;
+                } else {
+                    etiquetaCuentaAtras = 'Próximo evento';
+                    objetivo = null;
+                }
+            }
+        }
+
+        statusElement.textContent = mensajeEstado;
+        countdownLabel.textContent = etiquetaCuentaAtras || 'Próximo evento';
+
+        if (objetivo) {
+            const diferencia = objetivo - ahora;
+            countdownTimer.textContent = formatDuration(diferencia);
+        } else {
+            countdownTimer.textContent = '--:--:--';
+        }
+
+        nextShiftInfo.textContent = infoProximo;
+
+        establecerTabAutomatico(Boolean(segmentoActual));
+    }
+
+    function establecerTabAutomatico(enJornada) {
+        if (usuarioSeleccionoManual) return;
+        const destino = enJornada ? 'trabajo' : 'ocio';
+        if (ultimaPestanaAutomatica === destino) return;
+        ultimaPestanaAutomatica = destino;
+        mostrarSeccion(destino, null, true);
+    }
+
+    function calcularTotalSemanal() {
+        return Object.values(schedule).reduce((acumulado, segmentos) => {
+            return acumulado + segmentos.reduce((suma, segmento) => suma + (toMinutes(segmento.end) - toMinutes(segmento.start)), 0);
+        }, 0);
+    }
+
+    function obtenerInicioSemana(baseDate) {
+        const inicio = new Date(baseDate);
+        inicio.setHours(0, 0, 0, 0);
+        const day = inicio.getDay();
+        const diff = (day + 6) % 7; // Trasladar a lunes
+        inicio.setDate(inicio.getDate() - diff);
+        return inicio;
+    }
+
+    function calcularMinutosTrabajadosSemana(now) {
+        const inicioSemana = obtenerInicioSemana(now);
+        let minutos = 0;
+        for (let i = 0; i < 7; i++) {
+            const dia = new Date(inicioSemana);
+            dia.setDate(inicioSemana.getDate() + i);
+            const segmentos = schedule[dia.getDay()] || [];
+            segmentos.forEach(segmento => {
+                const inicio = createDateWithTime(dia, segmento.start);
+                const fin = createDateWithTime(dia, segmento.end);
+                if (now > inicio) {
+                    const limite = now < fin ? now : fin;
+                    minutos += Math.max(0, (limite - inicio) / 60000);
+                }
+            });
+        }
+        return Math.min(minutos, totalWeeklyMinutes);
+    }
+
+    function actualizarInterface() {
+        actualizarHora();
+        actualizarPanelLaboral();
+    }
+
+    actualizarInterface();
+    setInterval(actualizarInterface, 1000);
 </script>
 </body>
 </html>
