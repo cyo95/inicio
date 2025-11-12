@@ -1,809 +1,1097 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Centro de Enlaces</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-    body {
-        margin: 0;
-        height: 100vh;
-        font-family: 'Poppins', sans-serif;
-        color: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        background: linear-gradient(270deg, #6a11cb, #2575fc, #00c6ff, #ff6ec4);
-        background-size: 800% 800%;
-        animation: gradientMove 15s ease infinite;
-    }
+  :root{
+    --glass-bg: rgba(255,255,255,0.18);
+    --glass-strong: rgba(255,255,255,0.35);
+    --ink:#0f172a;
+  }
 
-    @keyframes gradientMove {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
+  body{
+    margin:0; height:100vh; font-family:'Poppins',sans-serif; color:#fff;
+    display:flex; justify-content:center; align-items:center; overflow:hidden;
+    background:linear-gradient(270deg,#6a11cb,#2575fc,#00c6ff,#ff6ec4);
+    background-size:800% 800%; animation:gradientMove 15s ease infinite;
+  }
+  @keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-    /* Contenedor principal centrado verticalmente */
-    .main-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        width: 100%;
-        max-width: 600px;
-        height: 90vh;
-        padding: 20px;
-        box-sizing: border-box;
-    }
+  .main-content{
+    display:flex; flex-direction:column; align-items:center; justify-content:space-evenly;
+    width:100%; max-width:600px; height:90vh; padding:20px; box-sizing:border-box; z-index:1;
+  }
 
-    h1 {
-        font-size: 2.8rem;
-        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-        margin: 0;
-        letter-spacing: 1px;
-    }
+  h1{font-size:2.8rem; text-shadow:0 4px 15px rgba(0,0,0,.4); margin:0; letter-spacing:1px}
+  .hora{font-size:2rem; font-weight:600; text-shadow:0 3px 10px rgba(0,0,0,.3); margin:10px 0 25px}
 
-    .hora {
-        font-size: 2rem;
-        font-weight: 600;
-        text-shadow: 0 3px 10px rgba(0,0,0,0.3);
-        margin: 10px 0 25px 0;
-    }
+  .nav-tabs{display:flex; gap:15px; margin-bottom:10px}
+  .nav-button{
+    background:rgba(255,255,255,.25); backdrop-filter:blur(5px); border:none; border-radius:15px;
+    padding:10px 20px; font-weight:bold; color:#fff; cursor:pointer; transition:.3s;
+  }
+  .nav-button:hover{background:rgba(255,255,255,.5); color:#000; transform:scale(1.05)}
+  .nav-button.active{background:rgba(255,255,255,.8); color:#000}
 
-    /* Barra de navegación */
-    .nav-tabs {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 10px;
-    }
+  .search-container{display:flex; justify-content:center; align-items:center; gap:10px; margin-bottom:15px}
+  .search-container input{
+    padding:10px; border-radius:8px; border:none; outline:none; width:250px; font-size:14px; transition:.3s;
+    box-shadow:inset 0 0 6px rgba(0,0,0,.2);
+  }
+  .search-container input:focus{transform:scale(1.05); box-shadow:0 0 10px rgba(255,255,255,.6)}
+  .search-container button{
+    padding:10px 15px; font-size:14px; font-weight:bold; border:none; border-radius:8px;
+    background:rgba(255,255,255,.25); color:#fff; cursor:pointer; transition:.3s; backdrop-filter:blur(5px);
+  }
+  .search-container button:hover:not(:disabled){background:rgba(255,255,255,.5); color:#000; transform:scale(1.08)}
 
-    .nav-button {
-        background: rgba(255,255,255,0.25);
-        backdrop-filter: blur(5px);
-        border: none;
-        border-radius: 15px;
-        padding: 10px 20px;
-        font-weight: bold;
-        color: white;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
+  .toggle-container{margin-bottom:4px}
+  .toggle-button{
+    padding:8px 15px; border-radius:20px; border:none; background:linear-gradient(90deg,#28a745,#00d27f);
+    color:#fff; font-weight:bold; cursor:pointer; transition:.4s ease; box-shadow:0 4px 12px rgba(0,0,0,.3)
+  }
+  .toggle-button.off{background:linear-gradient(90deg,#dc3545,#ff5a5f)}
 
-    .nav-button:hover {
-        background: rgba(255,255,255,0.5);
-        color: #000;
-        transform: scale(1.05);
-    }
+  /* Botón mini para emerger enlace copiado */
+  .clipboard-container{
+    margin-top:6px;
+    display:flex; justify-content:center;
+  }
+  .mini-button{
+    font-size:12px; padding:6px 10px; border:none; border-radius:10px;
+    background:rgba(255,255,255,.25); color:#fff; cursor:pointer; backdrop-filter:blur(5px);
+    transition:.2s ease;
+  }
+  .mini-button:hover{background:rgba(255,255,255,.5); color:#000; transform:scale(1.03)}
 
-    .nav-button.active {
-        background: rgba(255,255,255,0.8);
-        color: #000;
-    }
+  .container{
+    background:rgba(255,255,255,.15); border-radius:20px; padding:25px; box-shadow:0 4px 20px rgba(0,0,0,.3);
+    backdrop-filter:blur(12px); display:none; max-width:400px; width:100%;
+  }
+  .container.active{display:block}
 
-    .search-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
+  .grid-container{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
 
-    .search-container input {
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-        width: 250px;
-        font-size: 14px;
-        transition: all 0.3s;
-        box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
-    }
+  button{
+    padding:12px; font-size:16px; font-weight:bold; border-radius:10px; border:none; color:#fff; cursor:pointer;
+    transition:.3s; box-shadow:0 4px 12px rgba(0,0,0,.3); backdrop-filter:blur(10px)
+  }
+  button:hover{transform:scale(1.07); box-shadow:0 6px 18px rgba(0,0,0,.4)}
 
-    .search-container input:focus {
-        transform: scale(1.05);
-        box-shadow: 0 0 10px rgba(255,255,255,0.6);
-    }
+  /* Trabajar */
+  .btn-holded{background:linear-gradient(135deg,#ff4c4c,#ff7878)}
+  .btn-bankinter{background:linear-gradient(135deg,#ff7f00,#ff9c33)}
+  .btn-chatgpt{background:linear-gradient(135deg,#333,#666)}
+  .btn-whatsapp{background:linear-gradient(135deg,#25D366,#1DA955)}
+  .btn-idealista{background:linear-gradient(135deg,#FFD700,#ffed4a); color:#333}
+  .btn-meet{background:linear-gradient(135deg,#800080,#b266ff)}
+  /* Ocio */
+  .btn-netflix{background:linear-gradient(135deg,#E50914,#B81D24)}
+  .btn-movistar{background:linear-gradient(135deg,#00b4d8,#0077b6)}
+  .btn-youtube{background:linear-gradient(135deg,#FF0000,#CC0000)}
+  .btn-hbo{background:linear-gradient(135deg,#6a11cb,#2575fc)}
+  .btn-prime{background:linear-gradient(135deg,#00A8E1,#007BFF)}
+  .btn-twitch{background:linear-gradient(135deg,#6441A5,#9146FF)}
+  .btn-disney{background:linear-gradient(135deg,#113CCF,#0a174e)}
+  .btn-justeat{background:linear-gradient(135deg,#FF5A00,#FF8A33)}
 
-    .search-container button {
-        padding: 10px 15px;
-        font-size: 14px;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        background: rgba(255,255,255,0.25);
-        color: white;
-        cursor: pointer;
-        transition: all 0.3s;
-        backdrop-filter: blur(5px);
-    }
+  /* Paneles laterales */
+  .work-panel,.calendar-panel{
+    position:fixed; top:30px; width:320px; padding:20px; border-radius:20px; background:var(--glass-bg);
+    backdrop-filter:blur(14px); box-shadow:0 15px 30px rgba(0,0,0,.2); color:var(--ink); z-index:10;
+  }
+  .work-panel{right:30px}
+  .calendar-panel{left:30px}
 
-    .search-container button:hover:not(:disabled) {
-        background: rgba(255,255,255,0.5);
-        color: #000;
-        transform: scale(1.08);
-    }
+  .work-panel h2,.calendar-panel h2{
+    margin:0 0 10px; font-size:1.4rem; color:var(--ink); display:flex; align-items:center; gap:8px
+  }
+  .work-panel p{margin:8px 0; font-size:.95rem; color:rgba(15,23,42,.85)}
 
-    .toggle-container {
-        margin-bottom: 10px;
-    }
+  .countdown{display:flex; flex-direction:column; gap:4px; margin:12px 0 18px; padding:12px; border-radius:14px;
+    background:var(--glass-strong); color:var(--ink); box-shadow:inset 0 0 12px rgba(15,23,42,.08)}
+  .countdown .label{font-size:.8rem; letter-spacing:.5px; text-transform:uppercase; opacity:.8}
+  .countdown .time{font-size:1.6rem; font-weight:600; letter-spacing:1px}
 
-    .toggle-button {
-        padding: 8px 15px;
-        border-radius: 20px;
-        border: none;
-        background: linear-gradient(90deg, #28a745, #00d27f);
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.4s ease;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
+  .timeline{display:flex; flex-direction:column; gap:10px}
+  .timeline-track{
+    position:relative; height:16px; border-radius:999px;
+    background:#e6e6e6;
+    overflow:hidden; border:1px solid #00000026;
+  }
+  .timeline-segment{
+    position:absolute; top:0; bottom:0;
+    background:linear-gradient(135deg,rgba(42,252,152,.9),rgba(33,211,255,.9));
+    box-shadow:0 0 10px rgba(33,211,255,.4)
+  }
+  .timeline-marker{
+    position:absolute; top:-6px; width:4px; height:28px; background:#000; border-radius:4px;
+    box-shadow:0 0 0 rgba(0,0,0,0); transform:translateX(-50%)
+  }
+  .timeline-legend{display:flex; justify-content:space-between; font-size:.75rem; color:rgba(15,23,42,.7)}
 
-    .toggle-button.off {
-        background: linear-gradient(90deg, #dc3545, #ff5a5f);
-    }
+  .next-shift{font-size:.8rem; color:rgba(15,23,42,.75)}
 
-    .container {
-        background: rgba(255,255,255,0.15);
-        border-radius: 20px;
-        padding: 25px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        backdrop-filter: blur(12px);
-        display: none;
-        max-width: 400px;
-        width: 100%;
-    }
+  .progress-block{margin-top:18px; display:flex; flex-direction:column; gap:8px}
+  .progress-label{font-size:.78rem; letter-spacing:.3px; color:rgba(15,23,42,.75)}
+  .progress-track{position:relative; height:14px; border-radius:999px; background:rgba(15,23,42,.15); overflow:hidden}
 
-    .container.active {
-        display: block;
-    }
+  .progress-fill{
+    position:absolute; inset:0 auto 0 0; width:0; border-radius:999px;
+    background:linear-gradient(135deg,rgba(255,200,87,.95),rgba(255,128,171,.95));
+    transition:width .6s ease;
+    background-size:200% 100%;
+    animation:hueShift 4s linear infinite, slideStripes 1.2s linear infinite;
+    mask-image:repeating-linear-gradient(-45deg,rgba(0,0,0,.9) 0 12px,rgba(0,0,0,.65) 12px 24px);
+    -webkit-mask-image:repeating-linear-gradient(-45deg,rgba(0,0,0,.9) 0 12px,rgba(0,0,0,.65) 12px 24px);
+  }
+  @keyframes hueShift{0%{filter:hue-rotate(0)}100%{filter:hue-rotate(360deg)}}
+  @keyframes slideStripes{0%{background-position:0 0}100%{background-position:200% 0}}
 
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
+  /* Calendario */
+  .calendar-panel .calendar{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:8px}
+  .calendar-header{display:flex; align-items:center; justify-content:space-between; gap:8px}
+  .calendar-header button{padding:6px 10px; font-size:12px; border-radius:8px; box-shadow:none; background:var(--glass-strong); color:var(--ink)}
+  .weekday{font-size:.72rem; text-align:center; color:rgba(15,23,42,.7); padding:4px 0}
+  .day{
+    border-radius:10px; min-height:32px; display:flex; align-items:center; justify-content:center; font-weight:600;
+    background:var(--glass-strong); color:var(--ink); cursor:pointer; user-select:none;
+    transition:transform .08s ease-in-out;
+  }
+  .day:active{transform:scale(.98)}
+  /* Colores */
+  .day.split{background:rgba(255,213,79,.9)}     /* amarillo */
+  .day.morning{background:rgba(100,181,246,.9)}  /* azul    */
+  .day.free{background:rgba(129,199,132,.9)}     /* verde   */
+  .day.summer{background:linear-gradient(135deg,#ffb74d,#ff9800)} /* naranja (verano) */
+  .day.vacation{
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4,#fbc2eb,#a1c4fd,#c2ffd8);
+  }
 
-    button {
-        padding: 12px;
-        font-size: 16px;
-        font-weight: bold;
-        border-radius: 10px;
-        border: none;
-        color: white;
-        cursor: pointer;
-        transition: all 0.3s;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        backdrop-filter: blur(10px);
-    }
+  /* Hoy */
+  .day.today{
+    outline: 3px solid #000;
+    outline-offset: -3px;
+    box-shadow: 0 0 0 2px rgba(255,255,255,.7) inset;
+  }
 
-    button:hover {
-        transform: scale(1.07);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-    }
+  .legend{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; font-size:.74rem; color:rgba(15,23,42,.8)}
+  .legend .dot{width:10px; height:10px; display:inline-block; border-radius:50%; margin-right:5px}
+  .c-split{background:#FFD54F} .c-morning{background:#64B5F6} .c-free{background:#81C784}
+  .c-summer{background:#ff9800} .c-vac{background:linear-gradient(135deg,#ff9a9e,#a1c4fd)}
 
-    /* Botones sección Trabajar */
-    .btn-holded { background: linear-gradient(135deg, #ff4c4c, #ff7878); }
-    .btn-bankinter { background: linear-gradient(135deg, #ff7f00, #ff9c33); }
-    .btn-chatgpt { background: linear-gradient(135deg, #333, #666); }
-    .btn-whatsapp { background: linear-gradient(135deg, #25D366, #1DA955); }
-    .btn-idealista { background: linear-gradient(135deg, #FFD700, #ffed4a); color: #333; }
-    .btn-meet { background: linear-gradient(135deg, #800080, #b266ff); }
+  /* Panel desplegable de días libres y vacaciones */
+  .free-choices-wrapper{margin-top:10px}
+  .free-choices-toggle{
+    width:100%; border-radius:10px; background:var(--glass-strong); color:var(--ink);
+    padding:10px; font-weight:700; border:none; cursor:pointer;
+  }
+  .free-choices-panel{
+    margin-top:8px; display:none; padding:12px; border-radius:12px; background:rgba(255,255,255,.55); color:var(--ink);
+  }
+  .free-choices-panel.open{display:block}
 
-    /* Botones sección Ocio */
-    .btn-netflix { background: linear-gradient(135deg, #E50914, #B81D24); }
-    .btn-movistar { background: linear-gradient(135deg, #00b4d8, #0077b6); }
-    .btn-youtube { background: linear-gradient(135deg, #FF0000, #CC0000); }
-    .btn-hbo { background: linear-gradient(135deg, #6a11cb, #2575fc); }
-    .btn-prime { background: linear-gradient(135deg, #00A8E1, #007BFF); }
-    .btn-twitch { background: linear-gradient(135deg, #6441A5, #9146FF); }
+  .subsection-title{font-weight:700; margin:8px 0 6px}
+  .slots-buttons{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+  }
+  .slot-btn{
+    background:linear-gradient(135deg,#2563eb,#22d3ee);
+    color:#fff; border:none; border-radius:10px; padding:10px; cursor:pointer; font-weight:700;
+  }
+  .slot-btn.filled{background:linear-gradient(135deg,#10b981,#34d399)}
+  .slot-label{font-size:.8rem; opacity:.85}
 
-    /* Panel flotante de jornada laboral */
-    .work-panel {
-        position: fixed;
-        top: 30px;
-        right: 30px;
-        width: 320px;
-        padding: 20px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.18);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        color: #0f172a;
-        z-index: 10;
-    }
+  .vacation-range{
+    display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end;
+  }
+  .vacation-range input[type="date"]{
+    width:100%; padding:8px; border-radius:8px; border:1px solid rgba(0,0,0,.15); background:#fff; color:#111;
+  }
+  .btn-add{background:linear-gradient(135deg,#ff7a59,#f97316)}
+  .vacation-list{margin-top:8px; display:flex; flex-direction:column; gap:6px}
+  .vac-item{
+    display:flex; justify-content:space-between; align-items:center;
+    background:rgba(255,255,255,.7); padding:8px 10px; border-radius:10px;
+  }
+  .vac-item .remove{background:linear-gradient(135deg,#ef4444,#f97316)}
+  .help-note{font-size:.8rem; opacity:.85; margin-top:6px}
 
-    .work-panel h2 {
-        margin: 0 0 10px;
-        font-size: 1.4rem;
-        color: #0f172a;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+  /* Modal editor */
+  .modal{
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:30;
+    background:rgba(0,0,0,.4);
+  }
+  .modal.open{display:flex}
+  .modal-card{
+    width:min(560px,90vw); background:var(--glass-bg); backdrop-filter:blur(14px);
+    border-radius:18px; padding:18px; color:var(--ink); box-shadow:0 20px 50px rgba(0,0,0,.35)
+  }
+  .modal-card h3{margin:0 0 8px}
+  .modal-row{display:flex; flex-direction:column; gap:8px; margin:10px 0}
+  .choice-row{display:flex; gap:10px; flex-wrap:wrap}
+  .chip{
+    border:none; background:rgba(255,255,255,.55); color:var(--ink); padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:600;
+  }
+  .chip.active{background:#111827; color:#fff}
+  .seg-row{display:grid; grid-template-columns:repeat(4,1fr); gap:8px}
+  .seg-row label{font-size:.8rem}
+  .seg-input{width:100%; padding:8px; border-radius:10px; border:1px solid rgba(0,0,0,.15); background:#fff; color:#111}
+  .seg-hint{font-size:.8rem; opacity:.85}
+  .modal-actions{display:flex; gap:10px; justify-content:flex-end; margin-top:12px}
+  .btn-ghost{background:rgba(255,255,255,.45); color:var(--ink)}
+  .btn-danger{background:linear-gradient(135deg,#ef4444,#f97316)}
+  .btn-primary{background:linear-gradient(135deg,#2563eb,#22d3ee)}
+  .help{font-size:.8rem; opacity:.85}
 
-    .work-panel p {
-        margin: 8px 0;
-        font-size: 0.95rem;
-        color: rgba(15, 23, 42, 0.85);
-    }
-
-    .countdown {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        margin: 12px 0 18px;
-        padding: 12px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.35);
-        color: #0f172a;
-        box-shadow: inset 0 0 12px rgba(15, 23, 42, 0.08);
-    }
-
-    .countdown span.label {
-        font-size: 0.8rem;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        opacity: 0.8;
-    }
-
-    .countdown span.time {
-        font-size: 1.6rem;
-        font-weight: 600;
-        letter-spacing: 1px;
-    }
-
-    .timeline {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .timeline-track {
-        position: relative;
-        height: 14px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.15);
-        overflow: hidden;
-    }
-
-    .timeline-segment {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        background: linear-gradient(135deg, rgba(42, 252, 152, 0.9), rgba(33, 211, 255, 0.9));
-        box-shadow: 0 0 10px rgba(33, 211, 255, 0.6);
-    }
-
-    .timeline-marker {
-        position: absolute;
-        top: -4px;
-        width: 2px;
-        height: 22px;
-        background: #0f172a;
-        border-radius: 999px;
-        box-shadow: 0 0 6px rgba(15, 23, 42, 0.4);
-        transform: translateX(-50%);
-    }
-
-    .timeline-legend {
-        display: flex;
-        justify-content: space-between;
-        font-size: 0.75rem;
-        color: rgba(15, 23, 42, 0.7);
-    }
-
-    .next-shift {
-        font-size: 0.8rem;
-        color: rgba(15, 23, 42, 0.75);
-    }
-
-    .progress-block {
-        margin-top: 18px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .progress-label {
-        font-size: 0.78rem;
-        letter-spacing: 0.3px;
-        color: rgba(15, 23, 42, 0.75);
-    }
-
-    .progress-track {
-        position: relative;
-        height: 12px;
-        border-radius: 999px;
-        background: rgba(15, 23, 42, 0.15);
-        overflow: hidden;
-    }
-
-    .progress-fill {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        border-radius: 999px;
-        background: linear-gradient(135deg, rgba(255, 200, 87, 0.9), rgba(255, 128, 171, 0.9));
-        box-shadow: 0 0 12px rgba(255, 200, 87, 0.4);
-        transition: width 0.4s ease;
-    }
-
-    .summary-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-top: 18px;
-    }
-
-    .schedule-summary {
-        flex: 1;
-        margin: 0;
-        font-size: 0.82rem;
-        color: rgba(15, 23, 42, 0.75);
-        line-height: 1.4;
-    }
-
-    .weekly-percentage {
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: rgba(15, 23, 42, 0.85);
-        background: rgba(255, 255, 255, 0.4);
-        padding: 4px 9px;
-        border-radius: 999px;
-        white-space: nowrap;
-    }
-
-    @media (max-width: 900px) {
-        body {
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            padding-top: 40px;
-            height: auto;
-            min-height: 100vh;
-        }
-
-        .main-content {
-            width: calc(100% - 60px);
-            max-width: 600px;
-            height: auto;
-            margin-top: 0;
-        }
-
-        .work-panel {
-            position: static;
-            width: calc(100% - 60px);
-            margin: 25px auto 40px;
-        }
-    }
-
+  @media (max-width:900px){
+    body{flex-direction:column; justify-content:flex-start; align-items:center; padding-top:40px; height:auto; min-height:100vh}
+    .main-content{width:calc(100% - 60px); max-width:600px; height:auto; margin-top:0}
+    .work-panel,.calendar-panel{position:static; width:calc(100% - 60px); margin:25px auto 10px}
+  }
 </style>
 </head>
 <body>
-<div class="main-content">
+  <!-- Calendario izquierda -->
+  <div class="calendar-panel" id="calendar-panel">
+    <h2>📅 Calendario</h2>
+    <div class="calendar-header">
+      <button id="prev-month" onclick="changeMonth(-1)">&larr; Anterior</button>
+      <div id="calendar-title" style="font-weight:700"></div>
+      <button id="next-month" onclick="changeMonth(1)">Siguiente &rarr;</button>
+    </div>
+    <div class="calendar" id="calendar"></div>
+    <div class="legend">
+      <span><span class="dot c-split"></span> Partida</span>
+      <span><span class="dot c-morning"></span> Mañana</span>
+      <span><span class="dot c-free"></span> Libre / Festivo</span>
+      <span><span class="dot c-summer"></span> Verano</span>
+      <span><span class="dot c-vac"></span> Vacaciones</span>
+    </div>
+
+    <!-- DÍAS LIBRE ELECCIÓN + VACACIONES DE VERANO -->
+    <div class="free-choices-wrapper">
+      <button class="free-choices-toggle" onclick="toggleFreeChoices()">▼ Días de libre elección y vacaciones</button>
+      <div class="free-choices-panel" id="free-choices-panel">
+        <!-- Libre elección -->
+        <div class="subsection-title">Días de libre elección (9/año)</div>
+        <div class="slots-buttons" id="free-choices-slots"></div>
+        <div class="help-note">Pulsa cada botón para asignar la fecha. Se mostrarán como <b>Vacaciones</b> (arcoíris) y hacen override del horario.</div>
+
+        <!-- Vacaciones de verano (rango) -->
+        <div class="subsection-title">Vacaciones de verano (rango)</div>
+        <div class="vacation-range">
+          <div>
+            <label class="slot-label">Desde</label>
+            <input type="date" id="vac-from">
+          </div>
+          <div>
+            <label class="slot-label">Hasta</label>
+            <input type="date" id="vac-to">
+          </div>
+          <button class="btn-add" onclick="addVacationRange()">Añadir</button>
+        </div>
+        <div class="vacation-list" id="vacation-list"></div>
+        <div class="help-note">Puedes añadir varios rangos. Todas las fechas dentro se muestran como <b>Vacaciones</b> (arcoíris) y hacen override del horario.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Centro -->
+  <div class="main-content">
     <div>
-        <h1 id="saludo"></h1>
-        <div class="hora" id="hora"></div>
+      <h1 id="saludo"></h1>
+      <div class="hora" id="hora"></div>
     </div>
 
     <div class="nav-tabs">
-        <button class="nav-button" data-target="trabajo" onclick="mostrarSeccion('trabajo', this, false)">💼 Trabajar</button>
-        <button class="nav-button" data-target="ocio" onclick="mostrarSeccion('ocio', this, false)">🎬 Ocio</button>
+      <button class="nav-button" data-target="trabajo" onclick="mostrarSeccion('trabajo', this, false)">💼 Trabajar</button>
+      <button class="nav-button" data-target="ocio" onclick="mostrarSeccion('ocio', this, false)">🎬 Ocio</button>
     </div>
 
     <div class="search-container">
-        <input type="text" id="search" placeholder="Buscar en Google..." oninput="habilitarBotonBuscar()">
-        <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar en Google</button>
+      <input type="text" id="search" placeholder="Buscar en Google..." oninput="habilitarBotonBuscar()">
+      <button id="search-btn" onclick="buscarEnGoogle()" disabled>Buscar en Google</button>
     </div>
 
     <div class="toggle-container">
-        <button id="toggle-emergente" class="toggle-button" onclick="toggleEmergente()">Emergente: Activado</button>
+      <button id="toggle-emergente" class="toggle-button" onclick="toggleEmergente()">Emergente: Activado</button>
+    </div>
+    <div class="clipboard-container">
+      <button class="mini-button" id="clipboard-emerger-btn" onclick="emergerEnlaceCopiado()">Emerger enlace copiado</button>
     </div>
 
-    <!-- SECCIÓN TRABAJAR -->
+    <!-- Trabajo -->
     <div id="trabajo" class="container">
-        <div class="grid-container">
-            <button class="btn-holded" onclick="abrirVentana('https://app.holded.com/home')">Holded</button>
-            <button class="btn-bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Bankinter</button>
-            <button class="btn-chatgpt" onclick="abrirVentana('https://chatgpt.com')">ChatGPT</button>
-            <button class="btn-whatsapp" onclick="abrirVentana('https://web.whatsapp.com/')">WhatsApp</button>
-            <button class="btn-idealista" onclick="abrirVentana('https://www.idealista.com/')">Idealista</button>
-            <button class="btn-meet" onclick="abrirVentana('https://meet.google.com/')">Google Meet</button>
-        </div>
+      <div class="grid-container">
+        <button class="btn-holded" onclick="abrirVentana('https://app.holded.com/home')">Holded</button>
+        <button class="btn-bankinter" onclick="abrirVentana('https://empresas.bankinter.com/secure/es')">Bankinter</button>
+        <button class="btn-chatgpt" onclick="abrirVentana('https://chatgpt.com')">ChatGPT</button>
+        <button class="btn-whatsapp" onclick="abrirVentana('https://web.whatsapp.com/')">WhatsApp</button>
+        <button class="btn-idealista" onclick="abrirVentana('https://www.idealista.com/')">Idealista</button>
+        <button class="btn-meet" onclick="abrirVentana('https://meet.google.com/')">Google Meet</button>
+      </div>
     </div>
 
-    <!-- SECCIÓN OCIO -->
+    <!-- Ocio -->
     <div id="ocio" class="container">
-        <div class="grid-container">
-            <button class="btn-netflix" onclick="abrirVentana('https://www.netflix.com/')">Netflix</button>
-            <button class="btn-movistar" onclick="abrirVentana('https://ver.movistarplus.es/canales')">Movistar Plus</button>
-            <button class="btn-youtube" onclick="abrirVentana('https://www.youtube.com/')">YouTube</button>
-            <button class="btn-hbo" onclick="abrirVentana('https://www.hbomax.com/')">HBO Max</button>
-            <button class="btn-prime" onclick="abrirVentana('https://www.primevideo.com/')">Prime Video</button>
-            <button class="btn-twitch" onclick="abrirVentana('https://www.twitch.tv/')">Twitch</button>
-        </div>
+      <div class="grid-container">
+        <button class="btn-netflix" onclick="abrirVentana('https://www.netflix.com/')">Netflix</button>
+        <button class="btn-movistar" onclick="abrirVentana('https://ver.movistarplus.es/canales')">Movistar Plus</button>
+        <button class="btn-youtube" onclick="abrirVentana('https://www.youtube.com/')">YouTube</button>
+        <button class="btn-hbo" onclick="abrirVentana('https://www.hbomax.com/')">HBO Max</button>
+        <button class="btn-prime" onclick="abrirVentana('https://www.primevideo.com/')">Prime Video</button>
+        <button class="btn-twitch" onclick="abrirVentana('https://www.twitch.tv/')">Twitch</button>
+        <button class="btn-disney" onclick="abrirVentana('https://www.disneyplus.com/')">Disney+</button>
+        <button class="btn-justeat" onclick="abrirVentana('https://www.just-eat.es/')">Just Eat</button>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="work-panel" id="work-panel">
+  <!-- Jornada laboral derecha -->
+  <div class="work-panel" id="work-panel">
     <h2>🗓️ Jornada laboral</h2>
     <p id="work-status">Cargando...</p>
     <div class="countdown">
-        <span class="label" id="countdown-label">Próximo evento</span>
-        <span class="time" id="countdown-timer">--:--:--</span>
+      <span class="label" id="countdown-label">Próximo evento</span>
+      <span class="time" id="countdown-timer">--:--:--</span>
     </div>
     <div class="timeline">
-        <div class="timeline-track" id="timeline-track">
-            <div class="timeline-marker" id="timeline-marker"></div>
-        </div>
-        <div class="timeline-legend">
-            <span>00:00</span>
-            <span>12:00</span>
-            <span>24:00</span>
-        </div>
+      <div class="timeline-track" id="timeline-track">
+        <div class="timeline-marker" id="timeline-marker"></div>
+      </div>
+      <div class="timeline-legend"><span>00:00</span><span>12:00</span><span>24:00</span></div>
     </div>
     <div class="progress-block">
-        <span class="progress-label">Progreso de la jornada</span>
-        <div class="progress-track">
-            <div class="progress-fill" id="day-progress-fill"></div>
-        </div>
+      <span class="progress-label">Progreso de la jornada</span>
+      <div class="progress-track"><div class="progress-fill" id="day-progress-fill"></div></div>
     </div>
     <div class="summary-row">
-        <p class="schedule-summary" id="schedule-summary-text"></p>
-        <span class="weekly-percentage" id="weekly-percentage"></span>
+      <p class="schedule-summary" id="schedule-summary-text"></p>
+      <span class="weekly-percentage" id="weekly-percentage"></span>
     </div>
     <p class="next-shift" id="next-shift"></p>
-</div>
+  </div>
+
+  <!-- Modal Editor -->
+  <div class="modal" id="editor-modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editor-title">
+      <h3 id="editor-title">Editar día</h3>
+      <div class="help" id="editor-date-label"></div>
+
+      <div class="modal-row">
+        <div class="choice-row" id="type-choices">
+          <button class="chip" data-type="auto">Automático</button>
+          <button class="chip" data-type="free">Libre / Festivo</button>
+          <button class="chip" data-type="morning">Mañana (08:30–14:00)</button>
+          <button class="chip" data-type="split">Partida (09–14 / 16–19:30)</button>
+          <button class="chip" data-type="summer">Verano (L-J 09:00–14:30 / 15:15–18:30 · V 09:00–14:00)</button>
+          <button class="chip" data-type="custom">Personalizado</button>
+        </div>
+      </div>
+
+      <!-- UI personalizada: hasta 2 tramos -->
+      <div class="modal-row" id="custom-row" style="display:none">
+        <div class="seg-row">
+          <div>
+            <label>Entrada 1</label>
+            <input id="in1" class="seg-input" type="time" value="09:00">
+          </div>
+          <div>
+            <label>Salida 1</label>
+            <input id="out1" class="seg-input" type="time" value="13:00">
+          </div>
+          <div>
+            <label>Entrada 2</label>
+            <input id="in2" class="seg-input" type="time">
+          </div>
+          <div>
+            <label>Salida 2</label>
+            <input id="out2" class="seg-input" type="time">
+          </div>
+        </div>
+        <div class="seg-hint">Deja vacío el segundo tramo si no aplica. Se validará que cada entrada sea anterior a su salida.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-ghost" onclick="closeEditor()">Cancelar</button>
+        <button class="btn-danger" onclick="resetEditorToAuto()">Volver a automático</button>
+        <button class="btn-primary" onclick="saveEditor()">Guardar</button>
+      </div>
+    </div>
+  </div>
 
 <script>
-    let emergente = true;
-    let usuarioSeleccionoManual = false;
-    let ultimaPestanaAutomatica = null;
+  /* ========= Estado UI ========= */
+  let emergente = true;
+  let usuarioSeleccionoManual = false;
+  let ultimaPestanaAutomatica = null;
 
-    const schedule = {
-        1: [
-            { start: "09:00", end: "14:00" },
-            { start: "16:00", end: "19:30" }
-        ],
-        2: [
-            { start: "09:00", end: "14:00" },
-            { start: "16:00", end: "19:30" }
-        ],
-        3: [
-            { start: "09:00", end: "14:00" },
-            { start: "16:00", end: "19:30" }
-        ],
-        4: [
-            { start: "09:00", end: "14:00" },
-            { start: "16:00", end: "19:30" }
-        ],
-        5: [
-            { start: "08:30", end: "14:00" }
-        ],
-        6: [],
-        0: []
-    };
+  /* ========= PIN de administrador ========= */
+  const ADMIN_PIN = "9533";
+  let adminUnlocked = false;
+  function solicitarPin(){
+    if(adminUnlocked) return true;
+    const intento = prompt("Introduce PIN de administrador:");
+    if(intento === ADMIN_PIN){ adminUnlocked = true; return true; }
+    alert("PIN incorrecto.");
+    return false;
+  }
 
-    const scheduleSummary = "Resumen: L-J 09:00-14:00 / 16:00-19:30 · V 08:30-14:00";
-    const totalWeeklyMinutes = calcularTotalSemanal();
+  /* ========= Festivos BCN 2025/2026 (ejemplo práctico) ========= */
+  const HOLIDAYS_BCN_DEFAULT = new Set([
+    // 2025
+    "2025-01-01","2025-01-06","2025-04-18","2025-04-21","2025-05-01",
+    "2025-06-09","2025-06-24","2025-08-15","2025-09-11","2025-09-24",
+    "2025-11-01","2025-12-06","2025-12-08","2025-12-25","2025-12-26",
+    // 2026
+    "2026-01-01","2026-01-06","2026-04-03","2026-04-06","2026-05-01",
+    "2026-05-25","2026-06-24","2026-08-15","2026-09-11","2026-09-24",
+    "2026-10-12","2026-12-08","2026-12-25","2026-12-26"
+  ]);
 
-    const dayNames = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+  /* ========= Verano ========= */
+  const SUMMER_START_MM_DD = {month:5, day:15};  // 0-based month: junio=5
+  const SUMMER_END_MM_DD   = {month:8, day:15};  // septiembre=8
+  const summerSegmentsWeek = [{start:"09:00",end:"14:30"},{start:"15:15",end:"18:30"}]; // L-J
+  const summerSegmentsFri  = [{start:"09:00",end:"14:00"}]; // Viernes
 
-    function actualizarHora() {
-        const ahora = new Date();
-        const horas = ahora.getHours();
-        const minutos = ahora.getMinutes();
-        const segundos = ahora.getSeconds();
-        let saludo = "";
+  function inSummerRange(date){
+    const y = date.getFullYear();
+    const start = new Date(y, SUMMER_START_MM_DD.month, SUMMER_START_MM_DD.day, 0,0,0,0);
+    const end   = new Date(y, SUMMER_END_MM_DD.month,   SUMMER_END_MM_DD.day,   23,59,59,999);
+    return date >= start && date <= end;
+  }
 
-        if (horas < 12) saludo = "🌞 Buenos días";
-        else if (horas < 20) saludo = "🌤️ Buenas tardes";
-        else saludo = "🌙 Buenas noches";
+  /* ========= Sincronización en la nube (JSONBin) ========= */
+  const CLOUD_SYNC = true;
+  const JSONBIN_BIN_ID = "69147d04ae596e708f5480db";
+  const JSONBIN_API_KEY = "$2a$10$69w/rbpTWKj/UGRafuGLeuUS0L0S46wPx9iK3U8FN9UwX9sucisWq";
+  const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-        document.getElementById("saludo").innerText = saludo;
-        document.getElementById("hora").innerText =
-            `${horas.toString().padStart(2,'0')}:${minutos.toString().padStart(2,'0')}:${segundos.toString().padStart(2,'0')}`;
+  // Estado persistente
+  //  - overrides: { "YYYY-MM-DD": {type:'...', segments:[...] } }
+  //  - freeChoiceDays: ["YYYY-MM-DD", ...] (máx. 9)
+  //  - vacationRanges: [{start:"YYYY-MM-DD", end:"YYYY-MM-DD"}, ...]
+  let overrides = {};
+  let freeChoiceDays = [];
+  let vacationRanges = [];
+
+  function normalizePersistedData(raw){
+    if(raw && (raw.overrides || raw.freeChoiceDays || raw.vacationRanges)){
+      overrides = raw.overrides || {};
+      freeChoiceDays = Array.isArray(raw.freeChoiceDays) ? raw.freeChoiceDays : [];
+      vacationRanges = Array.isArray(raw.vacationRanges) ? raw.vacationRanges : [];
+    }else{
+      // Documento antiguo: todo el objeto era overrides
+      overrides = (raw && typeof raw==="object") ? raw : {};
+      freeChoiceDays = [];
+      vacationRanges = [];
+    }
+  }
+
+  async function loadPersisted(){
+    if(!CLOUD_SYNC){
+      try{
+        const raw = JSON.parse(localStorage.getItem("PERSISTED_STATE_V2") || "null");
+        normalizePersistedData(raw);
+      }catch{ overrides={}; freeChoiceDays=[]; vacationRanges=[]; }
+      return;
+    }
+    try{
+      const res = await fetch(JSONBIN_URL, { method:"GET", headers:{ "X-Master-Key": JSONBIN_API_KEY, "X-Bin-Meta":"false" }});
+      if(!res.ok) throw new Error("No se pudo leer del JSON remoto");
+      const data = await res.json();
+      normalizePersistedData(data);
+      localStorage.setItem("PERSISTED_STATE_V2", JSON.stringify({overrides, freeChoiceDays, vacationRanges}));
+    }catch(e){
+      console.warn("Fallo nube; usando copia local:", e);
+      try{
+        const raw = JSON.parse(localStorage.getItem("PERSISTED_STATE_V2") || "null");
+        normalizePersistedData(raw);
+      }catch{ overrides={}; freeChoiceDays=[]; vacationRanges=[]; }
+    }
+  }
+
+  function savePersisted(){
+    const payload = {overrides, freeChoiceDays, vacationRanges};
+    localStorage.setItem("PERSISTED_STATE_V2", JSON.stringify(payload));
+    if(CLOUD_SYNC){
+      fetch(JSONBIN_URL, {
+        method:"PUT",
+        headers:{ "Content-Type":"application/json", "X-Master-Key": JSONBIN_API_KEY },
+        body: JSON.stringify(payload)
+      }).catch(err=>console.warn("Fallo guardado nube:", err));
+    }
+  }
+
+  (async function bootstrap(){
+    await loadPersisted();
+    renderCalendar();
+    renderFreeChoicesPanel();
+    renderVacationRangesList();
+    actualizarPanelLaboral();
+  })();
+
+  /* ========= Horarios base ========= */
+  // 0=Dom,1=Lun,...,6=Sáb
+  const baseSchedule = {
+    1:[{start:"09:00",end:"14:00"},{start:"16:00",end:"19:30"}],
+    2:[{start:"09:00",end:"14:00"},{start:"16:00",end:"19:30"}],
+    3:[{start:"09:00",end:"14:00"},{start:"16:00",end:"19:30"}],
+    4:[{start:"09:00",end:"14:00"},{start:"16:00",end:"19:30"}],
+    5:[{start:"08:30",end:"14:00"}],
+    6:[], // Sábado
+    0:[]  // Domingo
+  };
+
+  const scheduleSummary = "Resumen: L-J 09:00-14:00 / 16:00-19:30 · V 08:30-14:00 · Festivos: libre · Víspera: 08:30-14:00 · Verano: 15/06–15/09 → L-J 09:00–14:30 / 15:15–18:30 · V 09:00–14:00";
+  const dayNames = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  const monthNames = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+  /* ========= Utilidades ========= */
+  function toMinutes(hm){const [h,m]=hm.split(":").map(Number);return h*60+m;}
+  function createDateWithTime(date,hm){const [h,m]=hm.split(":").map(Number);const d=new Date(date);d.setHours(h,m,0,0);return d;}
+  function formatDuration(ms){
+    if(ms<=0) return "00:00:00";
+    const s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60), ss=s%60;
+    return `${h.toString().padStart(2,"0")}:${m.toString().padStart(2,"0")}:${ss.toString().padStart(2,"0")}`;
+  }
+  function ymd(d){const y=d.getFullYear(), m=(d.getMonth()+1).toString().padStart(2,"0"), da=d.getDate().toString().padStart(2,"0"); return `${y}-${m}-${da}`;}
+  function obtenerInicioSemana(base){const i=new Date(base); i.setHours(0,0,0,0); const day=i.getDay(); const diff=(day+6)%7; i.setDate(i.getDate()-diff); return i;}
+  function parseYMD(s){const [Y,M,D]=s.split("-").map(Number); return new Date(Y,(M-1),D);}
+
+  function isHoliday(date){
+    const key=ymd(date);
+    return HOLIDAYS_BCN_DEFAULT.has(key);
+  }
+  function isHolidayEve(date){
+    if(date.getDay()===6 || date.getDay()===0) return false; // sáb/dom se mantienen libres
+    const next=new Date(date); next.setDate(date.getDate()+1);
+    return isHoliday(next);
+  }
+
+  function isInRange(date, startStr, endStr){
+    if(!startStr || !endStr) return false;
+    const s=parseYMD(startStr), e=parseYMD(endStr);
+    s.setHours(0,0,0,0); e.setHours(23,59,59,999);
+    return date>=s && date<=e;
+  }
+
+  function isVacationDay(date){
+    // Días de libre elección
+    if(freeChoiceDays.includes(ymd(date))) return true;
+    // Rangos de vacaciones
+    return vacationRanges.some(r => isInRange(date, r.start, r.end));
+  }
+
+  function cloneSegments(segs){return segs.map(s=>({start:s.start,end:s.end}))}
+
+  /* ========= Lógica de día (con overrides + verano + libres + vacaciones) ========= */
+  function getSegmentsForDate(date){
+    const key=ymd(date);
+
+    // Vacaciones (arcoíris): override total
+    if(isVacationDay(date)) return [];
+
+    // Overrides explícitos desde el editor
+    if(overrides[key]){
+      const o=overrides[key];
+      if(o.type==="free") return [];
+      if(o.type==="morning") return [{start:"08:30",end:"14:00"}];
+      if(o.type==="split")   return cloneSegments(baseSchedule[1]);
+      if(o.type==="summer"){ // aplicar regla de viernes
+        if(date.getDay()===5) return cloneSegments(summerSegmentsFri);
+        return cloneSegments(summerSegmentsWeek);
+      }
+      if(o.type==="custom")  return cloneSegments(o.segments||[]);
     }
 
-    function abrirVentana(url) {
-        if (emergente) {
-            window.open(url, "_blank", "toolbar=no,location=no,status=no");
-        } else {
-            window.open(url, "_blank");
+    const dow=date.getDay();
+    if(dow===6 || dow===0) return [];
+    if(isHoliday(date)) return [];
+    if(isHolidayEve(date)) return [{start:"08:30",end:"14:00"}];
+
+    // Verano por defecto
+    if(inSummerRange(date)){
+      if(dow===5) return cloneSegments(summerSegmentsFri); // Viernes
+      return cloneSegments(summerSegmentsWeek);            // L-J
+    }
+
+    // Resto del año
+    return cloneSegments(baseSchedule[dow]||[]);
+  }
+
+  function getDayClass(date){
+    if(isVacationDay(date)) return "vacation";
+    const segs=getSegmentsForDate(date);
+    if(segs.length===0) return "free";
+    const key=ymd(date);
+    if(!overrides[key] && inSummerRange(date) && date.getDay()>=1 && date.getDay()<=5){
+      if(date.getDay()===5) return "summer"; // viernes verano también naranja
+      return "summer";
+    }
+    if(segs.length===1) return "morning";
+    return "split";
+  }
+
+  function minutesForSegments(segs){return segs.reduce((s,x)=>s+(toMinutes(x.end)-toMinutes(x.start)),0)}
+  function calcularTotalSemanalDinamico(now){
+    const start=obtenerInicioSemana(now); let total=0;
+    for(let i=0;i<7;i++){const d=new Date(start); d.setDate(start.getDate()+i); total+=minutesForSegments(getSegmentsForDate(d));}
+    return total;
+  }
+  function calcularMinutosTrabajadosSemana(now){
+    const start=obtenerInicioSemana(now); let mins=0;
+    for(let i=0;i<7;i++){
+      const d=new Date(start); d.setDate(start.getDate()+i);
+      const segs=getSegmentsForDate(d);
+      for(const seg of segs){
+        const iDate=createDateWithTime(d,seg.start), fDate=createDateWithTime(d,seg.end);
+        if(now>iDate){const lim=now<fDate?now:fDate; mins+=Math.max(0,(lim-iDate)/60000);}
+      }
+    }
+    return Math.min(mins, calcularTotalSemanalDinamico(now));
+  }
+
+  /* ========= Reloj y apertura enlaces ========= */
+  function actualizarHora(){
+    const a=new Date(); const h=a.getHours(), m=a.getMinutes(), s=a.getSeconds();
+    const saludo = h<12 ? "🌞 Buenos días" : (h<20 ? "🌤️ Buenas tardes" : "🌙 Buenas noches");
+    document.getElementById("saludo").innerText = saludo;
+    document.getElementById("hora").innerText = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  }
+  function abrirVentana(url){ window.open(url,"_blank", emergente ? "toolbar=no,location=no,status=no" : ""); }
+  function buscarEnGoogle(){ const q=document.getElementById("search").value.trim(); if(q){ window.open(`https://www.google.com/search?q=${encodeURIComponent(q)}`,"_blank"); } }
+  function habilitarBotonBuscar(){ const i=document.getElementById('search'); const b=document.getElementById('search-btn'); b.disabled = i.value.trim()===""; }
+  function toggleEmergente(){ emergente=!emergente; const b=document.getElementById('toggle-emergente'); b.textContent = emergente? "Emergente: Activado":"Emergente: Desactivado"; b.classList.toggle("off", !emergente); }
+  function mostrarSeccion(id,btn=null,auto=false){
+    document.querySelectorAll('.container').forEach(c=>c.classList.remove('active'));
+    const obj=document.getElementById(id); if(obj) obj.classList.add('active');
+    document.querySelectorAll('.nav-button').forEach(b=>b.classList.remove('active'));
+    if(btn) btn.classList.add('active'); else { const b=document.querySelector(`.nav-button[data-target="${id}"]`); if(b) b.classList.add('active'); }
+    if(!auto) usuarioSeleccionoManual=true;
+  }
+
+  /* ========= Emerger enlace copiado ========= */
+  async function emergerEnlaceCopiado(){
+    try{
+      let text = "";
+      if (navigator.clipboard && navigator.clipboard.readText) {
+        text = (await navigator.clipboard.readText() || "").trim();
+      }
+      if (!text) {
+        const manual = prompt("No he podido leer el portapapeles. Pega aquí el enlace:");
+        if (!manual) return;
+        text = manual.trim();
+      }
+      if (!text) return;
+      if (!/^https?:\/\//i.test(text)) {
+        try { new URL("https://" + text); text = "https://" + text; }
+        catch { alert("El texto copiado no parece un enlace válido."); return; }
+      }
+      let urlObj; try { urlObj = new URL(text); } catch { alert("El texto copiado no es un enlace válido."); return; }
+      if (!/^https?$/.test(urlObj.protocol.replace(":",""))) { alert("Solo se permiten enlaces http/https."); return; }
+      abrirVentana(urlObj.href);
+    } catch (e) {
+      console.warn(e);
+      alert("No se pudo acceder al portapapeles. Pega el enlace manualmente cuando te lo pida.");
+      const manual = prompt("Pega aquí el enlace:");
+      if (!manual) return;
+      let t = manual.trim();
+      if (!/^https?:\/\//i.test(t)) t = "https://" + t;
+      try { new URL(t); } catch { alert("El texto pegado no es un enlace válido."); return; }
+      abrirVentana(t);
+    }
+  }
+
+  /* ========= Próximos eventos ========= */
+  function formatRelativeDay(base,target){
+    const b=new Date(base); const t=new Date(target); b.setHours(0,0,0,0); t.setHours(0,0,0,0);
+    const delta=Math.round((t-b)/(1000*60*60*24));
+    if(delta===0) return "hoy"; if(delta===1) return "mañana"; return `el ${dayNames[t.getDay()]}`;
+  }
+  function findNextWorkStart(now){
+    for(let i=0;i<7;i++){
+      const d=new Date(now); d.setHours(0,0,0,0); d.setDate(d.getDate()+i);
+      const segs=getSegmentsForDate(d); if(segs.length===0) continue;
+      if(i===0){
+        const cur=now.getHours()*60+now.getMinutes();
+        const nxt=segs.find(s=>cur<toMinutes(s.start));
+        if(nxt) return {date:new Date(d), segment:nxt, label:"hoy", segments:segs};
+      }else{
+        return {date:new Date(d), segment:segs[0], label:formatRelativeDay(now,d), segments:segs};
+      }
+    }
+    return null;
+  }
+
+  function actualizarPanelLaboral(){
+    const ahora=new Date();
+    const segsHoy=getSegmentsForDate(ahora);
+    const minAct=ahora.getHours()*60+ahora.getMinutes();
+
+    const status=document.getElementById('work-status');
+    const cLabel=document.getElementById('countdown-label');
+    const cTimer=document.getElementById('countdown-timer');
+    const nextInfo=document.getElementById('next-shift');
+    const timelineTrack=document.getElementById('timeline-track');
+    const marker=document.getElementById('timeline-marker');
+    const fill=document.getElementById('day-progress-fill');
+    const weekly=document.getElementById('weekly-percentage');
+    const sumEl=document.getElementById('schedule-summary-text');
+
+    timelineTrack.querySelectorAll('.timeline-segment').forEach(n=>n.remove());
+    segsHoy.forEach(s=>{
+      const el=document.createElement('div'); el.className='timeline-segment';
+      const left=(toMinutes(s.start)/1440)*100; const width=((toMinutes(s.end)-toMinutes(s.start))/1440)*100;
+      el.style.left=`${left}%`; el.style.width=`${width}%`; timelineTrack.appendChild(el);
+    });
+
+    marker.style.left = `${Math.min(Math.max((minAct/1440)*100,0),100)}%`;
+
+    const total=minutesForSegments(segsHoy);
+    let done=0;
+    for(const s of segsHoy){
+      const i=toMinutes(s.start), f=toMinutes(s.end), lim=Math.min(minAct,f);
+      if(lim>i) done+=Math.min(lim-i, f-i);
+    }
+    const pct = total>0 ? Math.min((done/total)*100,100) : 0;
+    fill.style.width = `${pct}%`;
+    fill.setAttribute('aria-valuenow', Math.round(pct));
+
+    if(sumEl && !sumEl.textContent) sumEl.textContent = scheduleSummary;
+
+    const minsSemana = calcularMinutosTrabajadosSemana(ahora);
+    const totalSemana = calcularTotalSemanalDinamico(ahora);
+    weekly.textContent = totalSemana>0 ? `${Math.round((minsSemana/totalSemana)*100)}% semana` : `0% semana`;
+
+    let msg='', label='', target=null, info='';
+    const actual = segsHoy.find(s=>minAct>=toMinutes(s.start) && minAct<toMinutes(s.end));
+
+    if(isHoliday(ahora)){
+      msg = `Hoy (${dayNames[ahora.getDay()]}) es festivo en Barcelona. Día libre.`;
+      label = 'Tiempo hasta la siguiente jornada';
+      const p = findNextWorkStart(ahora);
+      if(p){ const d=new Date(p.date); target=createDateWithTime(d,p.segment.start); info=`Próxima jornada ${p.label} ${p.segment.start}-${p.segment.end}.`; }
+    }else if(isVacationDay(ahora)){
+      msg = `Hoy está marcado como vacaciones.`;
+      label = 'Tiempo hasta la siguiente jornada';
+      const p = findNextWorkStart(ahora);
+      if(p){ const d=new Date(p.date); target=createDateWithTime(d,p.segment.start); info=`Próxima jornada ${p.label} ${p.segment.start}-${p.segment.end}.`; }
+    }else if(actual){
+      msg = `En jornada laboral (${actual.start} - ${actual.end}).`;
+      label = 'Tiempo restante para la siguiente pausa';
+      target = createDateWithTime(ahora, actual.end);
+      const idx = segsHoy.indexOf(actual);
+      if(idx < segsHoy.length-1){ info = `Después descanso hasta las ${segsHoy[idx+1].start}.`; }
+      else{ info = 'Después: fin de la jornada.'; }
+    }else{
+      const nextToday = segsHoy.find(s=>minAct<toMinutes(s.start));
+      if(segsHoy.length===0) msg = `Hoy (${dayNames[ahora.getDay()]}) es día libre.`;
+      else if(nextToday){ msg='En pausa dentro de la jornada.'; info=`Próximo bloque: ${nextToday.start} - ${nextToday.end}.`; }
+      else msg='Jornada finalizada por hoy.';
+
+      if(nextToday){ label='Tiempo restante para volver al trabajo'; target=createDateWithTime(ahora,nextToday.start); }
+      else{
+        const p=findNextWorkStart(ahora);
+        if(p){ const d=new Date(p.date); target=createDateWithTime(d,p.segment.start); label='Tiempo restante para comenzar la jornada';
+          msg += ` Próxima jornada ${p.label} a las ${p.segment.start}.`;
+          info = `Horario completo: ${p.segments.map(x=>`${x.start}-${x.end}`).join(' / ')}.`; }
+        else{ label='Próximo evento'; target=null; }
+      }
+    }
+
+    status.textContent = msg; cLabel.textContent = label || 'Próximo evento'; cTimer.textContent = target ? formatDuration(target-ahora) : '--:--:--';
+    nextInfo.textContent = info;
+
+    establecerTabAutomatico(Boolean(actual));
+  }
+
+  function establecerTabAutomatico(enJornada){
+    if(usuarioSeleccionoManual) return;
+    const destino = enJornada ? 'trabajo' : 'ocio';
+    if(ultimaPestanaAutomatica===destino) return;
+    ultimaPestanaAutomatica = destino;
+    mostrarSeccion(destino, null, true);
+  }
+
+  /* ========= Calendario ========= */
+  let calendarCursor = new Date();
+  function changeMonth(delta){ calendarCursor.setMonth(calendarCursor.getMonth()+delta); renderCalendar(); }
+
+  function weekDayIndexES(d){ const js=d.getDay(); return (js+6)%7; } // L=0..D=6
+
+  function renderCalendar(){
+    const cal=document.getElementById('calendar');
+    const title=document.getElementById('calendar-title');
+    cal.innerHTML='';
+    const y=calendarCursor.getFullYear(), m=calendarCursor.getMonth();
+    title.textContent = `${monthNames[m]} ${y}`;
+
+    const weekdays=['L','M','X','J','V','S','D'];
+    weekdays.forEach(w=>{ const el=document.createElement('div'); el.className='weekday'; el.textContent=w; cal.appendChild(el); });
+
+    const first=new Date(y,m,1);
+    const dim=new Date(y,m+1,0).getDate();
+    const blanks=weekDayIndexES(first);
+
+    for(let i=0;i<blanks;i++){ const ph=document.createElement('div'); ph.className='day muted'; cal.appendChild(ph); }
+
+    const today = new Date(); today.setHours(0,0,0,0);
+
+    for(let d=1; d<=dim; d++){
+      const current=new Date(y,m,d);
+      const cell=document.createElement('div');
+      const cls=getDayClass(current);
+      cell.className = `day ${cls}`;
+      cell.textContent = d.toString();
+
+      const currentKey = new Date(current); currentKey.setHours(0,0,0,0);
+      if (currentKey.getTime() === today.getTime()){
+        cell.classList.add('today');
+        cell.setAttribute('aria-current','date');
+        cell.title = 'Hoy';
+      }
+
+      cell.onclick = ()=> { if(solicitarPin()) openEditor(current); };
+      cal.appendChild(cell);
+    }
+
+    const totalCells = 7 + blanks + dim;
+    const rem = totalCells % 7;
+    if(rem!==0){
+      for(let i=0;i<7-rem;i++){ const ph=document.createElement('div'); ph.className='day muted'; cal.appendChild(ph); }
+    }
+  }
+
+  /* ========= Panel DÍAS LIBRES y VACACIONES ========= */
+  function toggleFreeChoices(){
+    const p = document.getElementById('free-choices-panel');
+    p.classList.toggle('open');
+  }
+
+  function renderFreeChoicesPanel(){
+    // Botones Día 1..9
+    const container = document.getElementById('free-choices-slots');
+    container.innerHTML = '';
+    for(let i=0;i<9;i++){
+      const btn = document.createElement('button');
+      btn.className = 'slot-btn' + (freeChoiceDays[i] ? ' filled' : '');
+      const label = freeChoiceDays[i] ? `Día ${i+1}: ${freeChoiceDays[i]}` : `Día ${i+1}`;
+      btn.textContent = label;
+      btn.onclick = ()=>{
+        const q = `¿Cuándo será tu Día ${i+1} de libre elección? (YYYY-MM-DD)`;
+        const value = prompt(q, freeChoiceDays[i] || '');
+        if(value===null) return;
+        const v = (value||'').trim();
+        if(v===''){
+          // Borrar ese slot
+          freeChoiceDays[i]=undefined;
+        }else{
+          if(!/^\d{4}-\d{2}-\d{2}$/.test(v)){ alert('Formato inválido. Usa YYYY-MM-DD.'); return; }
+          // Evitar duplicados
+          const already = freeChoiceDays.some((d,idx)=> idx!==i && d===v);
+          if(already){ alert('Esa fecha ya está asignada a otro día de libre elección.'); return; }
+          freeChoiceDays[i]=v;
         }
-    }
-
-    function buscarEnGoogle() {
-        const query = document.getElementById('search').value.trim();
-        if (query) {
-            window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-        }
-    }
-
-    function habilitarBotonBuscar() {
-        const input = document.getElementById('search');
-        const boton = document.getElementById('search-btn');
-        boton.disabled = input.value.trim() === "";
-    }
-
-    function toggleEmergente() {
-        emergente = !emergente;
-        const button = document.getElementById('toggle-emergente');
-        if (emergente) {
-            button.textContent = "Emergente: Activado";
-            button.classList.remove("off");
-        } else {
-            button.textContent = "Emergente: Desactivado";
-            button.classList.add("off");
-        }
-    }
-
-    function mostrarSeccion(id, boton = null, automatico = false) {
-        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-        const objetivo = document.getElementById(id);
-        if (objetivo) {
-            objetivo.classList.add('active');
-        }
-
-        const botones = document.querySelectorAll('.nav-button');
-        botones.forEach(b => b.classList.remove('active'));
-
-        if (boton) {
-            boton.classList.add('active');
-        } else {
-            const botonAutomatico = document.querySelector(`.nav-button[data-target="${id}"]`);
-            if (botonAutomatico) {
-                botonAutomatico.classList.add('active');
-            }
-        }
-
-        if (!automatico) {
-            usuarioSeleccionoManual = true;
-        }
-    }
-
-    function toMinutes(timeStr) {
-        const [hours, minutes] = timeStr.split(":").map(Number);
-        return hours * 60 + minutes;
-    }
-
-    function createDateWithTime(baseDate, timeStr) {
-        const [hours, minutes] = timeStr.split(":").map(Number);
-        const result = new Date(baseDate);
-        result.setHours(hours, minutes, 0, 0);
-        return result;
-    }
-
-    function formatDuration(ms) {
-        if (ms <= 0) return "00:00:00";
-        const totalSeconds = Math.floor(ms / 1000);
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-
-    function formatRelativeDay(base, target) {
-        const baseCopy = new Date(base);
-        const targetCopy = new Date(target);
-        baseCopy.setHours(0, 0, 0, 0);
-        targetCopy.setHours(0, 0, 0, 0);
-        const diffDays = Math.round((targetCopy - baseCopy) / (1000 * 60 * 60 * 24));
-        if (diffDays === 0) return "hoy";
-        if (diffDays === 1) return "mañana";
-        return `el ${dayNames[targetCopy.getDay()]}`;
-    }
-
-    function findNextWorkStart(now) {
-        for (let i = 0; i < 7; i++) {
-            const candidate = new Date(now);
-            candidate.setHours(0, 0, 0, 0);
-            candidate.setDate(candidate.getDate() + i);
-            const day = candidate.getDay();
-            const segments = schedule[day] || [];
-            if (segments.length === 0) continue;
-
-            if (i === 0) {
-                const currentMinutes = now.getHours() * 60 + now.getMinutes();
-                const upcomingToday = segments.find(segment => currentMinutes < toMinutes(segment.start));
-                if (upcomingToday) {
-                    return {
-                        date: new Date(candidate),
-                        segment: upcomingToday,
-                        label: "hoy",
-                        segments
-                    };
-                }
-            } else {
-                return {
-                    date: new Date(candidate),
-                    segment: segments[0],
-                    label: formatRelativeDay(new Date(now), new Date(candidate)),
-                    segments
-                };
-            }
-        }
-        return null;
-    }
-
-    function actualizarPanelLaboral() {
-        const ahora = new Date();
-        const diaSemana = ahora.getDay();
-        const segmentosHoy = schedule[diaSemana] || [];
-        const minutosActuales = ahora.getHours() * 60 + ahora.getMinutes();
-
-        const statusElement = document.getElementById('work-status');
-        const countdownLabel = document.getElementById('countdown-label');
-        const countdownTimer = document.getElementById('countdown-timer');
-        const nextShiftInfo = document.getElementById('next-shift');
-        const timelineTrack = document.getElementById('timeline-track');
-        const timelineMarker = document.getElementById('timeline-marker');
-        const dayProgressFill = document.getElementById('day-progress-fill');
-        const weeklyPercentageElement = document.getElementById('weekly-percentage');
-        const scheduleSummaryElement = document.getElementById('schedule-summary-text');
-
-        timelineTrack.querySelectorAll('.timeline-segment').forEach(seg => seg.remove());
-
-        segmentosHoy.forEach(segmento => {
-            const seg = document.createElement('div');
-            seg.className = 'timeline-segment';
-            const inicio = toMinutes(segmento.start);
-            const fin = toMinutes(segmento.end);
-            const left = (inicio / 1440) * 100;
-            const width = ((fin - inicio) / 1440) * 100;
-            seg.style.left = `${left}%`;
-            seg.style.width = `${width}%`;
-            timelineTrack.appendChild(seg);
-        });
-
-        const posicionActual = (minutosActuales / 1440) * 100;
-        timelineMarker.style.left = `${Math.min(Math.max(posicionActual, 0), 100)}%`;
-
-        const totalMinutesToday = segmentosHoy.reduce((total, segmento) => total + (toMinutes(segmento.end) - toMinutes(segmento.start)), 0);
-        let completedMinutesToday = 0;
-        segmentosHoy.forEach(segmento => {
-            const inicio = toMinutes(segmento.start);
-            const fin = toMinutes(segmento.end);
-            const limite = Math.min(minutosActuales, fin);
-            if (limite > inicio) {
-                completedMinutesToday += Math.min(limite - inicio, fin - inicio);
-            }
-        });
-        const progresoJornada = totalMinutesToday > 0 ? Math.min((completedMinutesToday / totalMinutesToday) * 100, 100) : 0;
-        if (dayProgressFill) {
-            dayProgressFill.style.width = `${progresoJornada}%`;
-        }
-
-        if (scheduleSummaryElement && !scheduleSummaryElement.textContent) {
-            scheduleSummaryElement.textContent = scheduleSummary;
-        }
-
-        if (weeklyPercentageElement) {
-            const minutosTrabajadosSemana = calcularMinutosTrabajadosSemana(ahora);
-            const porcentajeSemanal = totalWeeklyMinutes > 0 ? Math.min((minutosTrabajadosSemana / totalWeeklyMinutes) * 100, 100) : 0;
-            weeklyPercentageElement.textContent = `${Math.round(porcentajeSemanal)}% semana`;
-        }
-
-        let mensajeEstado = '';
-        let etiquetaCuentaAtras = '';
-        let objetivo = null;
-        let infoProximo = '';
-
-        const segmentoActual = segmentosHoy.find(segmento => minutosActuales >= toMinutes(segmento.start) && minutosActuales < toMinutes(segmento.end));
-
-        if (segmentoActual) {
-            mensajeEstado = `En jornada laboral (${segmentoActual.start} - ${segmentoActual.end}).`;
-            etiquetaCuentaAtras = 'Tiempo restante para la siguiente pausa';
-            objetivo = createDateWithTime(ahora, segmentoActual.end);
-            const indiceSegmento = segmentosHoy.indexOf(segmentoActual);
-            if (indiceSegmento < segmentosHoy.length - 1) {
-                const siguiente = segmentosHoy[indiceSegmento + 1];
-                infoProximo = `Después descanso hasta las ${siguiente.start}.`;
-            } else {
-                infoProximo = 'Después: fin de la jornada.';
-            }
-        } else {
-            const siguienteHoy = segmentosHoy.find(segmento => minutosActuales < toMinutes(segmento.start));
-            if (segmentosHoy.length === 0) {
-                mensajeEstado = `Hoy (${dayNames[diaSemana]}) es día libre.`;
-            } else if (siguienteHoy) {
-                mensajeEstado = 'En pausa dentro de la jornada.';
-                infoProximo = `Próximo bloque: ${siguienteHoy.start} - ${siguienteHoy.end}.`;
-            } else {
-                mensajeEstado = 'Jornada finalizada por hoy.';
-            }
-
-            if (siguienteHoy) {
-                etiquetaCuentaAtras = 'Tiempo restante para volver al trabajo';
-                objetivo = createDateWithTime(ahora, siguienteHoy.start);
-            } else {
-                const proximo = findNextWorkStart(ahora);
-                if (proximo) {
-                    const proximaFecha = new Date(proximo.date);
-                    objetivo = createDateWithTime(proximaFecha, proximo.segment.start);
-                    etiquetaCuentaAtras = 'Tiempo restante para comenzar la jornada';
-                    const labelDia = proximo.label;
-                    mensajeEstado += ` Próxima jornada ${labelDia} a las ${proximo.segment.start}.`;
-                    infoProximo = `Horario completo: ${proximo.segments.map(seg => `${seg.start}-${seg.end}`).join(' / ')}.`;
-                } else {
-                    etiquetaCuentaAtras = 'Próximo evento';
-                    objetivo = null;
-                }
-            }
-        }
-
-        statusElement.textContent = mensajeEstado;
-        countdownLabel.textContent = etiquetaCuentaAtras || 'Próximo evento';
-
-        if (objetivo) {
-            const diferencia = objetivo - ahora;
-            countdownTimer.textContent = formatDuration(diferencia);
-        } else {
-            countdownTimer.textContent = '--:--:--';
-        }
-
-        nextShiftInfo.textContent = infoProximo;
-
-        establecerTabAutomatico(Boolean(segmentoActual));
-    }
-
-    function establecerTabAutomatico(enJornada) {
-        if (usuarioSeleccionoManual) return;
-        const destino = enJornada ? 'trabajo' : 'ocio';
-        if (ultimaPestanaAutomatica === destino) return;
-        ultimaPestanaAutomatica = destino;
-        mostrarSeccion(destino, null, true);
-    }
-
-    function calcularTotalSemanal() {
-        return Object.values(schedule).reduce((acumulado, segmentos) => {
-            return acumulado + segmentos.reduce((suma, segmento) => suma + (toMinutes(segmento.end) - toMinutes(segmento.start)), 0);
-        }, 0);
-    }
-
-    function obtenerInicioSemana(baseDate) {
-        const inicio = new Date(baseDate);
-        inicio.setHours(0, 0, 0, 0);
-        const day = inicio.getDay();
-        const diff = (day + 6) % 7; // Trasladar a lunes
-        inicio.setDate(inicio.getDate() - diff);
-        return inicio;
-    }
-
-    function calcularMinutosTrabajadosSemana(now) {
-        const inicioSemana = obtenerInicioSemana(now);
-        let minutos = 0;
-        for (let i = 0; i < 7; i++) {
-            const dia = new Date(inicioSemana);
-            dia.setDate(inicioSemana.getDate() + i);
-            const segmentos = schedule[dia.getDay()] || [];
-            segmentos.forEach(segmento => {
-                const inicio = createDateWithTime(dia, segmento.start);
-                const fin = createDateWithTime(dia, segmento.end);
-                if (now > inicio) {
-                    const limite = now < fin ? now : fin;
-                    minutos += Math.max(0, (limite - inicio) / 60000);
-                }
-            });
-        }
-        return Math.min(minutos, totalWeeklyMinutes);
-    }
-
-    function actualizarInterface() {
-        actualizarHora();
+        // Compactar y cortar a 9
+        freeChoiceDays = freeChoiceDays.filter(Boolean).slice(0,9);
+        savePersisted();
+        renderFreeChoicesPanel();
+        renderCalendar();
         actualizarPanelLaboral();
+      };
+      container.appendChild(btn);
+    }
+  }
+
+  function renderVacationRangesList(){
+    const list = document.getElementById('vacation-list');
+    list.innerHTML = '';
+    if(!vacationRanges.length){
+      const empty = document.createElement('div');
+      empty.className='help-note';
+      empty.textContent='No hay rangos añadidos.';
+      list.appendChild(empty);
+      return;
+    }
+    vacationRanges.forEach((r,idx)=>{
+      const item = document.createElement('div');
+      item.className = 'vac-item';
+      const span = document.createElement('span');
+      span.textContent = `${r.start} → ${r.end}`;
+      const btn = document.createElement('button');
+      btn.className='remove';
+      btn.textContent='Eliminar';
+      btn.onclick = ()=>{
+        vacationRanges.splice(idx,1);
+        savePersisted();
+        renderVacationRangesList();
+        renderCalendar();
+        actualizarPanelLaboral();
+      };
+      item.appendChild(span);
+      item.appendChild(btn);
+      list.appendChild(item);
+    });
+  }
+
+  function addVacationRange(){
+    const from = (document.getElementById('vac-from').value||'').trim();
+    const to   = (document.getElementById('vac-to').value||'').trim();
+    if(!from || !to){ alert('Indica fecha de inicio y fin.'); return; }
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(from) || !/^\d{4}-\d{2}-\d{2}$/.test(to)){ alert('Formato inválido. Usa YYYY-MM-DD.'); return; }
+    if(parseYMD(from) > parseYMD(to)){ alert('La fecha de inicio debe ser anterior o igual a la de fin.'); return; }
+
+    // Opcional: evitar superposiciones exactas
+    const dup = vacationRanges.some(r => r.start===from && r.end===to);
+    if(dup){ alert('Ese rango ya existe.'); return; }
+
+    vacationRanges.push({start:from, end:to});
+    savePersisted();
+    renderVacationRangesList();
+    renderCalendar();
+    actualizarPanelLaboral();
+    document.getElementById('vac-from').value='';
+    document.getElementById('vac-to').value='';
+  }
+
+  /* ========= Editor de días ========= */
+  let editorDate = null;
+  const modal = document.getElementById('editor-modal');
+  const dateLabel = document.getElementById('editor-date-label');
+  const customRow = document.getElementById('custom-row');
+  const typeBtns = Array.from(document.querySelectorAll('#type-choices .chip'));
+
+  function setActiveType(type){
+    typeBtns.forEach(b=>b.classList.toggle('active', b.dataset.type===type));
+    customRow.style.display = (type==='custom') ? 'block' : 'none';
+  }
+
+  function openEditor(date){
+    editorDate = new Date(date);
+    const key = ymd(editorDate);
+    document.getElementById('editor-title').textContent = `Editar ${dayNames[editorDate.getDay()]}, ${editorDate.getDate()} de ${monthNames[editorDate.getMonth()]} de ${editorDate.getFullYear()}`;
+    const cls = getDayClass(editorDate);
+    const map = {free:'Libre / festivo', morning:'Mañana', split:'Partida', summer:'Verano', vacation:'Vacaciones'};
+    dateLabel.innerHTML = `<b>Estado actual:</b> ${map[cls] || 'Personalizado/Automático'}`;
+
+    const ov = overrides[key];
+    if(!ov){ setActiveType('auto'); resetCustomInputs(); }
+    else{
+      setActiveType(ov.type);
+      if(ov.type==='custom'){
+        const segs = ov.segments||[];
+        resetCustomInputs();
+        if(segs[0]){ document.getElementById('in1').value = segs[0].start; document.getElementById('out1').value = segs[0].end; }
+        if(segs[1]){ document.getElementById('in2').value = segs[1].start; document.getElementById('out2').value = segs[1].end; }
+      }else{
+        resetCustomInputs();
+      }
     }
 
-    actualizarInterface();
-    setInterval(actualizarInterface, 1000);
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+  }
+
+  function resetCustomInputs(){
+    document.getElementById('in1').value = "09:00";
+    document.getElementById('out1').value = "13:00";
+    document.getElementById('in2').value = "";
+    document.getElementById('out2').value = "";
+  }
+
+  function closeEditor(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    editorDate = null;
+  }
+
+  typeBtns.forEach(btn=>{
+    btn.addEventListener('click',()=> setActiveType(btn.dataset.type));
+  });
+
+  function resetEditorToAuto(){
+    if(!editorDate) return;
+    const key=ymd(editorDate);
+    delete overrides[key];
+    savePersisted();
+    renderCalendar();
+    actualizarPanelLaboral();
+    closeEditor();
+  }
+
+  function collectCustomSegments(){
+    const in1 = (document.getElementById('in1').value||"").trim();
+    const out1= (document.getElementById('out1').value||"").trim();
+    const in2 = (document.getElementById('in2').value||"").trim();
+    const out2= (document.getElementById('out2').value||"").trim();
+
+    const segs = [];
+    function validPair(a,b){ return /^\d{2}:\d{2}$/.test(a) && /^\d{2}:\d{2}$/.test(b) && toMinutes(a) < toMinutes(b); }
+
+    if(in1 || out1){
+      if(!validPair(in1,out1)){ alert("Primer tramo inválido: comprueba las horas."); return null; }
+      segs.push({start:in1,end:out1});
+    }
+    if(in2 || out2){
+      if(!validPair(in2,out2)){ alert("Segundo tramo inválido: comprueba las horas."); return null; }
+      segs.push({start:in2,end:out2});
+    }
+    return segs;
+  }
+
+  function saveEditor(){
+    if(!editorDate) return;
+    const key=ymd(editorDate);
+    const type = (typeBtns.find(b=>b.classList.contains('active'))||{}).dataset?.type || 'auto';
+
+    if(type==='auto'){
+      delete overrides[key];
+    }else if(type==='free'){
+      overrides[key] = {type:'free', segments:[]};
+    }else if(type==='morning'){
+      overrides[key] = {type:'morning', segments:[{start:"08:30",end:"14:00"}]};
+    }else if(type==='split'){
+      overrides[key] = {type:'split', segments:cloneSegments(baseSchedule[1])};
+    }else if(type==='summer'){
+      // Aplicamos regla L-J y viernes diferente automáticamente
+      overrides[key] = {type:'summer', segments: []}; // segmentos se derivan por día concreto
+    }else if(type==='custom'){
+      const segs = collectCustomSegments();
+      if(segs===null) return; // error ya mostrado
+      overrides[key] = {type:'custom', segments: segs};
+    }
+    savePersisted();
+    renderCalendar();
+    actualizarPanelLaboral();
+    closeEditor();
+  }
+
+  modal.addEventListener('click', (e)=>{ if(e.target===modal) closeEditor(); });
+  window.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.classList.contains('open')) closeEditor(); });
+
+  /* ========= Bucle principal ========= */
+  function actualizarInterface(){
+    actualizarHora();
+    actualizarPanelLaboral();
+  }
+
+  // Init (re-render tras bootstrap también)
+  renderCalendar();
+  renderFreeChoicesPanel();
+  renderVacationRangesList();
+  mostrarSeccion('trabajo', document.querySelector('.nav-button[data-target="trabajo"]'), true);
+  actualizarInterface();
+  setInterval(actualizarInterface, 1000);
+
+  document.getElementById('calendar-title').setAttribute('aria-live','polite');
 </script>
+
 </body>
 </html>
